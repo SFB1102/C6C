@@ -1,4 +1,4 @@
-# C6C (C6 Converter for Historical Corpora)
+# C6C
 
 C6C is built to convert different historical Corpora from various input formats to common, standardized output format(s). It also allows for custom processing of the input data, e.g., to map historical POS tagsets to the modern standard tagset.
 
