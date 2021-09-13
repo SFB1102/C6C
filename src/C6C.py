@@ -21,7 +21,7 @@ importers = {"tcfdta" : importer.TCFDTAImporter, "xmldta" : importer.XMLDTAImpor
              "coraxmlrem" : importer.CoraXMLReMImporter, "tuebadsconll" : importer.TUEBADSConllImporter, \
              "coraxmlanselm" : importer.CoraXMLAnselmImporter, "coraxmlrefbo" : importer.CoraXMLReFBoImporter, \
              "text" : importer.TextImporter, "tigerxml": importer.TigerXMLImporter, \
-             "xmlkajuk" : importer.XMLKaJuKImporter, "xmlfnhdc" : importer.XMLFnhdCImporter,
+             "xmlkajuk" : importer.XMLKaJuKImporter, "mercuriustigerxml": importer.MercuriusTigerXMLImporter, "xmlfnhdc" : importer.XMLFnhdCImporter,
              "conll2000" : importer.CoNLL2000Importer, "sdewac" : importer.SDeWaCIteratorImporter,
              "germanc" : importer.GerManCCoNLLImporter, "tuebatrees" : importer.TuebaDZPTBImporter,
              "ddbtigernegra" : importer.DDBTigerNegraImporter, "fuerstinnenexb" : importer.FuerstinnenEXBImporter,
@@ -195,7 +195,7 @@ def cli():
                                                                     "tuebadz", "annisgrid", "webannotopf", "webannotsv", "coraxmlrem",
                                                                     "tuebadsconll", "coraxmlanselm", "coraxmlrefbo", "text", "tigerxml",
                                                                     "xmlkajuk", "xmlfnhdc", "conll2000", "sdewac", "germanc", "tuebatrees",
-                                                                    "ddbtigernegra", "fuerstinnenexb", "refup"], \
+                                                                    "ddbtigernegra", "fuerstinnenexb", "refup", "mercuriustigerxml"], \
               case_sensitive=False), help="Importer for input file format.", callback=add_component)
 @click.option("-e", "--exporter", required=True, type=click.Choice(["conlluplus", "conllu", "DTAtsv", "HIPKONtsv", "text", "pos", "conll2000", "ptb"], case_sensitive=False), \
               help="Exporter for desired output format.", callback=add_component)
