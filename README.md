@@ -6,6 +6,7 @@ C6C is built to convert different historical Corpora from various input formats 
 
 The pipeline takes one or more files in a given input format and imports them into document objects. These document can then be modified by one or more processors, before exporting them into the same or another export format.
 
+![Pipeline structure](/doc/pipeline.svg)
 ## Usage
 
 ### Requirements
@@ -17,15 +18,20 @@ The pipeline takes one or more files in a given input format and imports them in
 
 The pipeline is called via the command line:
 
-`py C6C.py convert -i input_format -o output_format -p "['processor_name', 'processor_name']" input_dir_or_file output_dir_or_file`
+> py C6C.py convert -i input_format -o output_format -p "['processor_name', 'processor_name']" input_dir_or_file output_dir_or_file
 
 - `input_dir_or_file`: can be a single file or a folder
 - `output_dir_or_file`: can be a single file or a folder
-- `input_format`: the following input formats are currently supported (documentation see below): `text`, `tcfDTA`, `xmlDTA`, `tiger`, `conlluplus`, `conllu`, `DTAtsv`, `tuebadz`, `annisgrid`, `webannotopf`, `webannotsv`, `coraxmlrem`, `coraxmlref`, `tuebatrees` 
-- `output_format`: the following output formats are currently supported (documentation see below): `conlluplus`, `conllu`, `DTAtsv`, `HIPKONtsv`, `text`, `pos`, `conll2000`, `ptb`
-- `processor_name`: processors are called in the given order; the following processors are currently implemented (documentation see below): `dtachopper`, `dtasimplifier`, `hipkontostts`, `addmissingstts`, `topfsimplifier`, `satzklammertotopf`, `tsvindexer`, `topfchopper`, `conllindexer`, `refhitstostts`,  `depmanipulator`, `depprocessor` 
+- `input_format`: the following input formats are currently supported ([documentation](#importers) see below): `text`, `tcfDTA`, `xmlDTA`, `tiger`, `conlluplus`, `conllu`, `DTAtsv`, `tuebadz`, `annisgrid`, `webannotopf`, `webannotsv`, `coraxmlrem`, `coraxmlref`, `tuebatrees` 
+- `output_format`: the following output formats are currently supported ([documentation](#exporters) see below): `conlluplus`, `conllu`, `DTAtsv`, `HIPKONtsv`, `text`, `pos`, `conll2000`, `ptb`
+- `processor_name`: processors are called in the given order; the following processors are currently implemented ([documentation](#processors) see below): `dtachopper`, `dtasimplifier`, `hipkontostts`, `addmissingstts`, `topfsimplifier`, `satzklammertotopf`, `tsvindexer`, `topfchopper`, `conllindexer`, `refhitstostts`,  `depmanipulator`, `depprocessor` 
 
 ## Importers
+
+1. [CoNLLUImporter](#conlluimporter)
+2. [TigerImporter](#tigerimporter)
+3. ...
+
 
 ### CoNLLUImporter
 
