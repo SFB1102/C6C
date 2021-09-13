@@ -22,16 +22,49 @@ The pipeline is called via the command line:
 
 - `input_dir_or_file`: can be a single file or a folder
 - `output_dir_or_file`: can be a single file or a folder
-- `input_format`: the following input formats are currently supported ([documentation](#importers) see below): `text`, `tcfDTA`, `xmlDTA`, `tiger`, `conlluplus`, `conllu`, `DTAtsv`, `tuebadz`, `annisgrid`, `webannotopf`, `webannotsv`, `coraxmlrem`, `coraxmlref`, `tuebatrees` 
+- `input_format`: the following input formats are currently supported ([documentation](#importers) see below): `text`, `tcfDTA`, `xmlDTA`, `tiger`, `tigerxml`, `mercuriustigerxml`, `conlluplus`, `conllu`, `conll2000`, `DTAtsv`, `tuebadz`, `annisgrid`, `webannotopf`, `webannotsv`, `coraxmlrem`, `coraxmlrefbo`, `coraxmlanselm`, `tuebadsconll`, `tuebatrees`, `ddbtigernegra`, `fuerstinnenexb`, `refup`, `germanc`, `sdewac` 
 - `output_format`: the following output formats are currently supported ([documentation](#exporters) see below): `conlluplus`, `conllu`, `DTAtsv`, `HIPKONtsv`, `text`, `pos`, `conll2000`, `ptb`
-- `processor_name`: processors are called in the given order; the following processors are currently implemented ([documentation](#processors) see below): `dtachopper`, `dtasimplifier`, `hipkontostts`, `addmissingstts`, `topfsimplifier`, `satzklammertotopf`, `tsvindexer`, `topfchopper`, `conllindexer`, `refhitstostts`,  `depmanipulator`, `depprocessor` 
+- `processor_name`: processors are called in the given order; the following processors are currently implemented ([documentation](#processors) see below): `dtachopper`, `dtasimplifier`, `hipkontostts`, `addmissingstts`, `topfsimplifier`, `satzklammertotopf`, `tsvindexer`, `hitstostts`,  `tuebadstopf`, `anselmtostts`, `topfchopper`, `conllindexer`, `refhitstostts`,  `depmanipulator`, `depprocessor`, `mercuriustostts`, `refuptostts`, `fuerstinnentostts`, `virgelmapper`, `pronominaladverb`, `refupcoding`, `bracketremover`
 
 ## Importers
 
-1. [CoNLLUImporter](#conlluimporter)
-2. [TigerImporter](#tigerimporter)
-3. ...
+1. [CoNLLUPlusImporter](#conlluplusimporter)
+2. [CoNLLUImporter](#conlluimporter)
+3. [TigerImporter](#tigerimporter)
+4. ...
 
+### CoNLLUPlusImporter
+
+- Name for usage in command line: `conlluplus`
+
+#### Input Format
+
+- [CoNLL-U Plus Format](https://universaldependencies.org/ext-format.html)
+- Lines containing the annotations of a word (seperated by tabs), blank lines marking sentence boundaries.
+- Comment lines starting with hash (#).
+- First line is a comment line listing the column names.
+- Field contains an underscore if info is not available for the current word.
+
+#### Meta-Info
+
+- No meta-info available in this format.
+
+#### Annotations
+
+- Can contain any subset of the following annotations plus additional annotations.
+
+column name | annotation
+------ | ------
+ID | word index
+FORM | word form
+LEMMA | Lemma
+UPOS | Universal POS-Tag
+XPOS | STTS-Tag
+FEATS | morphological features
+HEAD | head
+DEPREL | dependency relation to the head
+DEPS | dependency graph
+MISC | other annotation  
 
 ### CoNLLUImporter
 
@@ -408,6 +441,23 @@ TOK_ID | word index of token-element
 - The Processor `ReFHiTStoSTTSMapper` can be used to match the POS-tags of ReF.BO to the corresponding STTS-tags.
 
 
+### TextImporter
+
+- Name for usage in command line: `text`
+
+#### Input Format
+
+- One word per line, blank lines marking sentence boundaries.
+
+#### Meta-Info
+
+- No meta-info available in this format.
+
+#### Annotations
+
+- Except of the word form there are no annotations available in this format.
+
+
 ### XMLKaJuKImporter
 
 - Name for usage in command line: `xmlkajuk`
@@ -462,6 +512,89 @@ type | type of a word/phrase
 
 - Manual changes of the input files (because of mistakes in the xml-format) are documented in the file `Korrektur.txt`
 - In the text of the output file, parts of the sentence that are annotated as ellipsis are put into square brackets
+
+### MercuriusTigerXMLImporter
+
+- Name for usage in command line: `mercuriustigerxml`
+
+#### Input Format
+
+- XML-Tiger/Negra-Format
+	  - The `<head>` node contains meta-information and information about the annotations.
+	  - The `<body>` node contains the individual sentences with their syntax-graphs.
+	  - Each graph consists of `<terminals>`, which contain the words and the corresponding annotations, and `<nonterminals>`,
+		which contain the structure of the syntax-tree including the corresponding edge and node labels.
+
+#### Input Data
+
+- [Mercurius-Baumbank, Version 1.1](https://www.laudatio-repository.org/browse/corpus/VyQiCnMB7CArCQ9CjF3O/corpora)
+
+#### Meta-Info
+
+- Not available.
+
+#### Annotations
+
+column name | annotation
+------ | ------
+ID | word index
+FORM | word form
+LEMMA | Lemma
+UPOS | Universal POS-Tag
+XPOS | STTS-Tag
+FEATS | morphological features
+HEAD | head
+DEPREL | dependency relation to the head
+DEPS | dependency graph
+MISC | other annotation
+POS | POS-Tag from Mercurius
+TigerID | word index in the Tiger/Negra-files  
+
+#### Additional Info
+
+- The Processor `MercuriusToSTTSMapper` can be used to match the POS-tags of Mercurius to the corresponding STTS-tags.
+
+### ReFUPImporter
+
+- Name for usage in command line: `refup`
+
+#### Input Format
+
+- XML-Tiger/Negra-Format
+	  - The `<head>` node contains meta-information and information about the annotations.
+	  - The `<body>` node contains the individual sentences with their syntax-graphs.
+	  - Each graph consists of `<terminals>`, which contain the words and the corresponding annotations, and `<nonterminals>`,
+		which contain the structure of the syntax-tree including the corresponding edge and node labels.
+
+#### Input Data
+
+- [Referenzkorpus Frühneuhochdeutsch](https://www.ruhr-uni-bochum.de/wegera/ref/index.htm)
+
+#### Meta-Info
+
+- Not available.
+
+#### Annotations
+
+column name | annotation
+------ | ------
+ID | word index
+FORM | word form
+LEMMA | Lemma
+UPOS | Universal POS-Tag
+XPOS | STTS-Tag
+FEATS | morphological features
+HEAD | head
+DEPREL | dependency relation to the head
+DEPS | dependency graph
+MISC | other annotation
+POS | POS-Tag from ReFUP
+TigerID | word index in the Tiger/Negra-files  
+
+#### Additional Info
+
+- The Processor `ReFUPToSTTSMapper` can be used to match the POS-tags of ReFUP to the corresponding STTS-tags.
+- The Processor `ReFUPCoding` can be used to have the correct coding of 'ß' in the output file.
 
 ### XMLFnhdCImporter
 
@@ -728,5 +861,170 @@ TimelineID | corresponding index in the timeline
 - The Processor `FuerstinnentoSTTSMapper` can be used to match the POS-tags of the 'Fuerstinnenkorrespondez' to the corresponding STTS-tags.
 
 ## Processors
+
+### HIPKONtoSTTSMapper
+
+- Maps the POS-Tags from HIPKON to their corresdponding STTS-Tags.
+
+#### Required Input
+
+- Text-file of the form `POS-Tag\tSTTS-Tag` that contains the rules for the mapping.
+- Doc-Object that contains tokens that have at least a FORM and POS attribute.
+
+#### Output
+
+- Doc-Object that contains tokens with added XPOS attribute for the STTS-Tags.
+- CSV-File with tokens that still don't have an STTS-Tag and their exact location.
+- List of rules which effectively were used during the mapping.
+
+
+### addmissingSTTStoHIPKON
+
+- Maps the POS-Tags of the remaining tokens after processing with the HIPKONtoSTTSMapper to their corresponding STTS-Tags.
+
+#### Required Input
+
+- CSV-File of the form `Token\tFilename\tSent_id\tTok_id\tSTTS-Tag` that contains the STTS-Tags of the remaining tokens.
+- Doc-object that contains the tokens.
+
+#### Output
+
+- Doc-Object where all tokens have an XPOS attribute with their STTS-Tag.
+
+
+### HiTStoSTTSMapper
+
+- Maps the HiTS-Tags from ReM to their corresponding STTS-Tags.
+
+#### Required Input
+
+- CSV-File of the form `POS-Tag\tPOSLEMMA-Tag\tCount\tCandidates\tSTTS-Tag\tRemarks` that contains the rules for the mapping.
+- Doc-Object that contains tokens that have at least ID, FORM, POS, POS_GEN and PUNC attributes.
+
+#### Output
+
+- Doc-Object that contains tokens with added XPOS attribute for the STTS-Tags.
+
+
+### ANSELMtoSTTSMapper
+
+- Maps the POS-Tags from Anselm to their corresponding STTS-Tags.
+
+#### Required Input
+
+- CSV-File of the form `POS-Tag\tSTTS-Tag` that contains the rules for the mapping.
+- Doc-Object that contains tokens that have at least a POS attribute.
+
+#### Output
+
+- Doc-Object that contains tokens with added XPOS attribute for the STTS-Tags.
+
+
+### ReFHiTStoSTTSMapper
+
+- Maps the HiTS-Tags from ReF.BO to their corresponding STTS-Tags.
+
+#### Required Input
+
+- CSV-File of the form `POS-Tag\tPOSLEMMA-Tag\tSTTS-Tag` that contains the rules for the mapping.
+- Doc-Object that contains tokens that have at least ID, FORM, POS and POS_LEMMA attributes.
+
+#### Output
+
+- Doc-Object that contains tokens with added XPOS attribute for the STTS-Tags.
+
+
+### MercuriusToSTTSMapper
+
+- Maps the POS-Tags from Mercurius to their corresponding STTS-Tags.
+
+#### Required Input
+
+- CSV-file of the form `POS-Tag\tSTTS-Tag\tComments` that contains the rules for the mapping.
+- Doc-Object that contains tokens that have at least ID, FORM and POS attributes.
+
+#### Output
+
+- Doc-Object that contains tokens with added XPOS attribute for the STTS-Tags.
+
+
+### ReFUPToSTTSMapper
+
+- Maps the POS-Tags from ReF.UP to their corresponding STTS-Tags.
+
+#### Required Input
+
+- CSV-file of the form `POS-Tag\tSTTS-Tag` that contains the rules for the mapping.
+- Doc-Object that contains tokens that have at least ID, FORM and POS attributes.
+
+#### Output
+
+- Doc-Object that contains tokens with added XPOS attribute for the STTS-Tags.
+
+
+### FuerstinnentoSTTSMapper
+
+- Maps the POS-Tags from Fuerstinnenkorrespondenz to their corresponding STTS-Tags.
+
+#### Required Input
+
+- CSV-file of the form `POS-Tag\tSTTS-Tag` that contains the rules for the mapping.
+- Doc-Object that contains tokens that have at least a POS and LEMMA attribute.
+
+#### Output
+
+- Doc-Object that contains tokens with added XPOS attribute for the STTS-Tags.
+
+
+### VirgelMapper
+
+- Maps all Virgel (token of the form "/") in a document to the XPOS-Tag "$(".
+
+#### Required Input
+
+- Doc-Object that contains tokens that have at least a FORM attribute.
+
+#### Output
+
+- Doc-Object that contains tokens with updated XPOS-Tag for Virgel.
+
+
+### PronominalAdverbMapper
+
+- Maps all Pronominal Adverbs with XPOS-tag "PROAV" to the XPOS-Tag "PAV".
+
+#### Required Input
+
+- Doc-Object that contains tokens that have at least an XPOS attribute.
+
+#### Output
+
+- Doc-Object that contains tokens with updated XPOS-Tag for Pronominal adverbs.
+
+
+### ReFUPCoding
+
+- Corrects the coding of "ß" in ReF.UP.
+
+#### Required Input
+
+- Doc-Object that contains tokens that have at least a FORM attribute.
+
+#### Output
+
+- Doc-Object that contains tokens with updatet coding.
+
+
+### BracketRemover
+
+- Removes all forms of brackets from the tokens (except of punctuation-token).
+
+#### Required Input
+
+- Doc-Object that contains tokens that have at least a FORM attribute.
+
+#### Output
+
+- Doc-Object that contains tokens without brackets in their word form.
 
 ## Exporters
