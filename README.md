@@ -1053,3 +1053,82 @@ TimelineID | corresponding index in the timeline
 - Doc-Object that contains tokens without brackets in their word form.
 
 ## Exporters
+
+1. [CoNLLUPlusExporter](#conlluplusexporter)
+2. [CoNLLUExporter](#conlluexporter)
+3. [CoNLL2000Exporter](#conll2000exporter)
+4. [TextExporter](#textexporter)
+
+### CoNLLUPlusExporter
+
+- Name for usage in command line: `conlluplus`
+
+#### Output Format
+
+- [CoNLL-U Plus Format](https://universaldependencies.org/ext-format.html)
+- Lines containing the annotations of a word (seperated by tabs), blank lines marking sentence boundaries.
+- Comment lines starting with hash (#).
+- First line is a comment line listing the column names.
+- Field contains an underscore if info is not available for the current word.
+
+#### Example
+
+>\# global.columns = ID FORM LEMMA UPOS XPOS FEATS HEAD DEPREL DEPS MISC Morph NE TopoField WSD  
+\# doc_id(tueba) = T990507.2  
+\# sent_id = 1  
+\# sent_id(tueba) = s1  
+\# text = Veruntreute die AWO Spendengeld?  
+1	Veruntreute	veruntreuen	VERB	VVFIN	Mood=Ind|Number=Sing|Person=3|Tense=Past|VerbForm=Fin	0	root	_	_	3sit	_	LK	_  
+2	die	die	DET	ART	Case=Nom|Definite=Def|Gender=Fem|Number=Sing|PronType=Art	3	det	_	_	nsf	_	MF	_  
+...
+
+### CoNLLUExporter
+
+- Name for usage in command line: `conllu`
+
+#### Output Format
+
+- [CoNLL-U Format](https://universaldependencies.org/format.html)
+- Lines containing the annotations of a word (seperated by tabs), blank lines marking sentence boundaries.
+- 10 columns containing the following annotations for each word:  
+	ID (word index), FORM (word form), LEMMA (Lemma), UPOS (universal POS-tag), XPOS (language specific POS-tag),
+	FEATS (Morphological features), HEAD (head), DEPREL (dependency relation to the head), DEPS (dependency graph),
+	MISC (other annotation)
+- Field contains an underscore if info is not available for the current word.
+
+#### Example
+
+>1	Von	von	APPR	APPR	_	0	ROOT	0	ROOT  
+2	dem	der	ART	ART	dat|sg|masc	4	NK	4	NK  
+...
+
+### CoNLL2000Exporter
+
+- Name for usage in command line: `conll2000`
+
+#### Output Format
+
+- Lines containing the annotations of a word (seperated by whitespaces), blank lines marking sentence boundaries.
+- 3 columns containing the following annotations for each word:  
+	FORM (word form), XPOS (language specific POS-tag), CHUNK (syntactically correlated parts of words)
+- Field contains an underscore if info is not available for the current word.
+
+### TextExporter
+
+- Name for usage in command line: `text`
+
+#### Output Format
+
+- One word per line, blank lines marking sentence boundaries.
+
+#### Example
+
+>Briefe  
+eines  
+Verſtorbenen  
+.  
+>
+>Zweiter  
+Theil  
+.  
+...
