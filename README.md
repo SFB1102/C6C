@@ -31,7 +31,19 @@ The pipeline is called via the command line:
 1. [CoNLLUPlusImporter](#conlluplusimporter)
 2. [CoNLLUImporter](#conlluimporter)
 3. [TigerImporter](#tigerimporter)
-4. ...
+4. [TuebaDzImporter](#tuebadzimporter)
+5. [ANNISGridSentenceImporter](#annisgridsentenceimporter)
+6. [CoraXMLReMImporter](#coraxmlremimporter)
+7. [CoraXMLAnselmImporter](#coraxmlanselmimporter)
+8. [CoraXMLReFBoImporter](#coraxmlrefboimporter)
+9. [TextImporter](#textimporter)
+11. [XMLKaJuKImporter](#xmlkajukimporter)
+12. [MercuriusTigerXMLImporter](#mercuriustigerxmlimporter)
+13. [ReFUPImporter](#refupimporter)
+14. [XMLFnhdCImporter](#xmlfnhdcimporter)
+15. [GerManCCoNLLImporter](#germancconllimporter)
+16. [DDBTigerNegraImporter](#ddbtigernegraimporter)
+17. [FuerstinnenEXBImporter](#fuerstinnenexbimporter)
 
 ### CoNLLUPlusImporter
 
@@ -861,6 +873,19 @@ TimelineID | corresponding index in the timeline
 - The Processor `FuerstinnentoSTTSMapper` can be used to match the POS-tags of the 'Fuerstinnenkorrespondez' to the corresponding STTS-tags.
 
 ## Processors
+
+1. [HIPKONtoSTTSMapper](#hipkontosttsmapper)
+2. [addmissingSTTStoHIPKON](#addmissingsttstohipkon)
+3. [HiTStoSTTSMapper](#hitstosttsmapper)
+4. [ANSELMtoSTTSMapper](#anselmtosttsmapper)
+5. [ReFHiTStoSTTSMapper](#refhitstosttsmapper)
+6. [MercuriusToSTTSMapper](#mercuriustosttsmapper)
+7. [ReFUPToSTTSMapper](#refuptosttsmapper)
+8. [FuerstinnentoSTTSMapper](#fuerstinnentosttsmapper)
+9. [VirgelMapper](#virgelmapper)
+10. [PronominalAdverbMapper](#pronominaladverbmapper)
+11. [ReFUPCoding](#refupcoding)
+12. [BracketRemover](#bracketremover)
 
 ### HIPKONtoSTTSMapper
 
