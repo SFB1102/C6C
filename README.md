@@ -874,18 +874,102 @@ TimelineID | corresponding index in the timeline
 
 ## Processors
 
-1. [HIPKONtoSTTSMapper](#hipkontosttsmapper)
-2. [addmissingSTTStoHIPKON](#addmissingsttstohipkon)
-3. [HiTStoSTTSMapper](#hitstosttsmapper)
-4. [ANSELMtoSTTSMapper](#anselmtosttsmapper)
-5. [ReFHiTStoSTTSMapper](#refhitstosttsmapper)
-6. [MercuriusToSTTSMapper](#mercuriustosttsmapper)
-7. [ReFUPToSTTSMapper](#refuptosttsmapper)
-8. [FuerstinnentoSTTSMapper](#fuerstinnentosttsmapper)
-9. [VirgelMapper](#virgelmapper)
-10. [PronominalAdverbMapper](#pronominaladverbmapper)
-11. [ReFUPCoding](#refupcoding)
-12. [BracketRemover](#bracketremover)
+1. [DTAChopper](#dtachopper)
+2. [TopFChopper](#topfchopper)
+3. [SATZKLAMMERtoTopF](#satzklammertotopf)
+4. [TSVIndexer](#tsvindexer)
+5. [CoNLLUPLUSIndexer](#conlluplusindexer)
+6. [TUEBADSTopFExtractor](#tuebadstopfextractor)
+7. [HIPKONtoSTTSMapper](#hipkontosttsmapper)
+8. [addmissingSTTStoHIPKON](#addmissingsttstohipkon)
+9. [HiTStoSTTSMapper](#hitstosttsmapper)
+10. [ANSELMtoSTTSMapper](#anselmtosttsmapper)
+11. [ReFHiTStoSTTSMapper](#refhitstosttsmapper)
+12. [MercuriusToSTTSMapper](#mercuriustosttsmapper)
+13. [ReFUPToSTTSMapper](#refuptosttsmapper)
+14. [FuerstinnentoSTTSMapper](#fuerstinnentosttsmapper)
+15. [VirgelMapper](#virgelmapper)
+16. [PronominalAdverbMapper](#pronominaladverbmapper)
+17. [ReFUPCoding](#refupcoding)
+18. [BracketRemover](#bracketremover)
+
+### DTAChopper
+
+- Removes unannotated sentences and reindexes the sentences and character offsets.
+
+#### Required Input
+
+- Doc-Object that contains tokens that have at least a MovElemCat, TSVID, CHARS and FORM attribute.
+
+#### Output
+
+- Doc-Object that contains only sentences with relevant MovElemCat annotation.
+
+
+### TopFChopper
+
+- Removes unannotated sentences.
+
+#### Required Input
+
+- Doc-Object that contains tokens that have at least a TopF attribute.
+
+#### Output
+
+- Doc-Object that contains only sentences with relevant TopF annotation.
+
+
+### SATZKLAMMERtoTopF
+
+- Maps the attribute 'SATZKLAMMER' from HIPKON to the corresponding topological field.
+
+#### Required Input
+
+- Doc-Object that contains tokens that have at least a SATZKLAMMER attribute.
+
+#### Output
+
+- Doc-Object that contains tokens with added TopF attribute.
+
+
+### TSVIndexer
+
+- Adds the sentence and word index and the character offsets for the WebAnno TSV Format.
+
+#### Required Input
+
+- Doc-Object that contains tokens that have at least a FORM attribute.
+
+#### Output
+
+- Doc-Object that contains tokens with added TSVID and CHARS attribute.
+
+
+### CoNLLUPLUSIndexer
+
+- Adds the sentence and word index for the CoNLL-U Plus Format.
+
+#### Required Input
+
+- Doc-Object that contains sentences with tokens.
+
+#### Output
+
+- Doc-Object that contains sentences with added sent_id attribute and tokens with added ID attribute.
+
+
+### TUEBADSTopFExtractor
+
+- Extracts the topological field information from TueBa-D/S.
+
+#### Required Input
+
+- Doc-Object that contains tokens with at least a POS:HD and SYNTAX attribute.
+
+#### Output
+
+- Doc-Object that contains tokens with added PHRASE:HEAD and TopoField attribute.
+
 
 ### HIPKONtoSTTSMapper
 
