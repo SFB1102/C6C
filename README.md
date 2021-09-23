@@ -874,24 +874,57 @@ TimelineID | corresponding index in the timeline
 
 ## Processors
 
-1. [DTAChopper](#dtachopper)
-2. [TopFChopper](#topfchopper)
-3. [SATZKLAMMERtoTopF](#satzklammertotopf)
-4. [TSVIndexer](#tsvindexer)
-5. [CoNLLUPLUSIndexer](#conlluplusindexer)
-6. [TUEBADSTopFExtractor](#tuebadstopfextractor)
-7. [HIPKONtoSTTSMapper](#hipkontosttsmapper)
-8. [addmissingSTTStoHIPKON](#addmissingsttstohipkon)
-9. [HiTStoSTTSMapper](#hitstosttsmapper)
-10. [ANSELMtoSTTSMapper](#anselmtosttsmapper)
-11. [ReFHiTStoSTTSMapper](#refhitstosttsmapper)
-12. [MercuriusToSTTSMapper](#mercuriustosttsmapper)
-13. [ReFUPToSTTSMapper](#refuptosttsmapper)
-14. [FuerstinnentoSTTSMapper](#fuerstinnentosttsmapper)
-15. [VirgelMapper](#virgelmapper)
-16. [PronominalAdverbMapper](#pronominaladverbmapper)
-17. [ReFUPCoding](#refupcoding)
-18. [BracketRemover](#bracketremover)
+1. [DTASimplifier](#dtasimplifier)
+2. [TopFSimplifier](#topfsimplifier)
+3. [DTAChopper](#dtachopper)
+4. [TopFChopper](#topfchopper)
+5. [SATZKLAMMERtoTopF](#satzklammertotopf)
+6. [TSVIndexer](#tsvindexer)
+7. [CoNLLUPLUSIndexer](#conlluplusindexer)
+8. [TUEBADSTopFExtractor](#tuebadstopfextractor)
+9. [HIPKONtoSTTSMapper](#hipkontosttsmapper)
+10. [addmissingSTTStoHIPKON](#addmissingsttstohipkon)
+11. [HiTStoSTTSMapper](#hitstosttsmapper)
+12. [ANSELMtoSTTSMapper](#anselmtosttsmapper)
+13. [ReFHiTStoSTTSMapper](#refhitstosttsmapper)
+14. [MercuriusToSTTSMapper](#mercuriustosttsmapper)
+15. [ReFUPToSTTSMapper](#refuptosttsmapper)
+16. [FuerstinnentoSTTSMapper](#fuerstinnentosttsmapper)
+17. [VirgelMapper](#virgelmapper)
+18. [PronominalAdverbMapper](#pronominaladverbmapper)
+19. [ReFUPCoding](#refupcoding)
+20. [BracketRemover](#bracketremover)
+
+### DTASimplifier
+
+- Removes unneeded annotation columns and simplifies some annotations from the DTA corpus.
+
+#### Required Input
+
+- Doc-Object that contains tokens with annotations from the DTA Corpus.
+
+#### Output
+
+- Doc-Object that contains tokens with simplified columns.
+- The remaining columns are:  
+	ID, FORM, XPOS, LEMMA, OrthCorr, Cite, Antec, AntecHead, SentBrckt,
+	MovElem, MovElemPos, RelCType, AdvCVPos, AdvCVHead
+	
+
+### TopFSimplifier
+
+- Removes unneeded annotation columns, simplifies the topological field annotation and creates a sentence bracket column.
+
+#### Required Input
+
+- Doc-Object that contains tokens with TopF annotation.
+
+#### Output
+
+- Doc-Object that contains tokens with simplified columns.
+- The remaining columns are:  
+	ID, FORM, XPOS, LEMMA, FEATS, DEPREL, HEAD, CHUNK, TopF, SentBrckt
+	
 
 ### DTAChopper
 
