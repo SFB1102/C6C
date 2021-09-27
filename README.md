@@ -30,20 +30,23 @@ The pipeline is called via the command line:
 
 1. [CoNLLUPlusImporter](#conlluplusimporter)
 2. [CoNLLUImporter](#conlluimporter)
-3. [TigerImporter](#tigerimporter)
-4. [TuebaDzImporter](#tuebadzimporter)
-5. [ANNISGridSentenceImporter](#annisgridsentenceimporter)
-6. [CoraXMLReMImporter](#coraxmlremimporter)
-7. [CoraXMLAnselmImporter](#coraxmlanselmimporter)
-8. [CoraXMLReFBoImporter](#coraxmlrefboimporter)
-9. [TextImporter](#textimporter)
-11. [XMLKaJuKImporter](#xmlkajukimporter)
-12. [MercuriusTigerXMLImporter](#mercuriustigerxmlimporter)
-13. [ReFUPImporter](#refupimporter)
-14. [XMLFnhdCImporter](#xmlfnhdcimporter)
-15. [GerManCCoNLLImporter](#germancconllimporter)
-16. [DDBTigerNegraImporter](#ddbtigernegraimporter)
-17. [FuerstinnenEXBImporter](#fuerstinnenexbimporter)
+3. [CoNLL2000Importer](#conll2000importer)
+4. [TigerImporter](#tigerimporter)
+5. [TigerXMLImporter](#tigerxmlimporter)
+6. [TuebaDzImporter](#tuebadzimporter)
+7. [TuebaDZPTBImporter](#tuebadzptbimporter)
+8. [ANNISGridSentenceImporter](#annisgridsentenceimporter)
+9. [CoraXMLReMImporter](#coraxmlremimporter)
+10. [CoraXMLAnselmImporter](#coraxmlanselmimporter)
+11. [CoraXMLReFBoImporter](#coraxmlrefboimporter)
+12. [TextImporter](#textimporter)
+13. [XMLKaJuKImporter](#xmlkajukimporter)
+14. [MercuriusTigerXMLImporter](#mercuriustigerxmlimporter)
+15. [ReFUPImporter](#refupimporter)
+16. [XMLFnhdCImporter](#xmlfnhdcimporter)
+17. [GerManCCoNLLImporter](#germancconllimporter)
+18. [DDBTigerNegraImporter](#ddbtigernegraimporter)
+19. [FuerstinnenEXBImporter](#fuerstinnenexbimporter)
 
 ### CoNLLUPlusImporter
 
@@ -119,6 +122,34 @@ MISC | other annotation
 
 - Only for RIDGES Corpus: annotations in three columns of the CoNLL-U format (normally corresponding to UPOS, DEPS, MISC) weren't extracted because they contained the same information as the columns XPOS, HEAD, DEPREL
 
+### CoNLL2000Importer
+
+- Name for usage in command line: `conll2000`
+
+#### Input Format
+
+- [CoNLL-2000](https://www.clips.uantwerpen.be/conll2000/chunking/)
+- Lines containing the annotations of a word (seperated by whitespaces), blank lines marking sentence boundaries.
+- 3 columns containing the following annotations for each word:  
+	FORM (word form), XPOS (language specific POS-tag), CHUNK (syntactically correlated parts of words)
+- Field contains an underscore if info is not available for the current word.
+
+#### Input Data
+
+- e.g. Data for the [CoNLL-2000 shared task](https://www.clips.uantwerpen.be/conll2000/chunking/)
+
+#### Meta-Info
+
+- No meta-info available in this format.
+
+#### Annotations
+
+column name | annotation
+------ | ------
+FORM | word form
+XPOS | language specific POS-tag
+CHUNK | syntactically correlated parts of words  
+
 ### TigerImporter
 
 - Name for usage in command line: `tiger`
@@ -161,6 +192,36 @@ HEAD | head
 DEPREL | dependency relation to the head
 DEPS | dependency graph
 MISC | other annotation  
+
+### TigerXMLImporter
+
+- Name for usage in command line: `tigerxml`
+
+#### Input Format
+
+- [TIGER-XML Format](https://www.ims.uni-stuttgart.de/documents/ressourcen/werkzeuge/tigersearch/doc/html/TigerXML.html)
+- The `<head>` node contains meta-information and information about the annotations.
+- The `<body>` node contains the individual sentences with their syntax-graphs.
+- Each graph consists of `<terminals>`, which contain the words and the corresponding annotations, and `<nonterminals>`,
+	which contain the structure of the syntax-tree including the corresponding edge and node labels.
+
+#### Input Data
+
+- [TIGER Corpus](https://www.ims.uni-stuttgart.de/forschung/ressourcen/korpora/tiger/)
+
+#### Meta-Info
+
+- Not available in this format.
+
+#### Annotations
+
+column name | annotation
+------ | ------
+FORM | word form
+LEMMA | Lemma
+XPOS | STTS-Tag
+FEATS | morphological features
+TigerID | word index in the Tiger-files  
 
 ### TuebaDzImporter
 
@@ -208,7 +269,33 @@ WSD | GermaNet ID of the word sense
 
 #### Additional Info
 
-- We divided the documents up into a training, development and test set (80-10-10) via random choice
+- We divided the documents up into a training, development and test set (80-10-10) via random choice.
+
+### TuebaDZPTBImporter
+
+- Name for usage in command line: `tuebatrees`
+
+#### Input Format
+
+- Penn Treebank Format
+- Each line contains one sentence in a syntactic bracketing style
+
+#### Input Data
+
+- [TüBa-D/Z Release 11.0](https://uni-tuebingen.de/fakultaeten/philosophische-fakultaet/fachbereiche/neuphilologie/seminar-fuer-sprachwissenschaft/arbeitsbereiche/allg-sprachwissenschaft-computerlinguistik/ressourcen/corpora/tueba-dz/)
+
+#### Meta-Info
+
+- Following meta-info is extracted into the output file:
+	syntax-tree string
+  
+#### Annotations
+
+column name | annotation
+------ | ------
+FORM | word form
+XPOS | STTS-Tag
+PTBLabel | Penn Treebank Label  
 
 ### ANNISGridSentenceImporter
 
@@ -1240,10 +1327,10 @@ TimelineID | corresponding index in the timeline
 
 #### Example
 
->IBM	NE	_  
-und	KON	_  
-Siemens	NE	_  
-gelten	VVFIN	_  
+>Confidence NN B-NP  
+in IN B-PP  
+the DT B-NP  
+pound NN I-NP  
 ...
 
 
