@@ -36,17 +36,20 @@ The pipeline is called via the command line:
 6. [TuebaDzImporter](#tuebadzimporter)
 7. [TuebaDZPTBImporter](#tuebadzptbimporter)
 8. [ANNISGridSentenceImporter](#annisgridsentenceimporter)
-9. [CoraXMLReMImporter](#coraxmlremimporter)
-10. [CoraXMLAnselmImporter](#coraxmlanselmimporter)
-11. [CoraXMLReFBoImporter](#coraxmlrefboimporter)
-12. [TextImporter](#textimporter)
-13. [XMLKaJuKImporter](#xmlkajukimporter)
-14. [MercuriusTigerXMLImporter](#mercuriustigerxmlimporter)
-15. [ReFUPImporter](#refupimporter)
-16. [XMLFnhdCImporter](#xmlfnhdcimporter)
-17. [GerManCCoNLLImporter](#germancconllimporter)
-18. [DDBTigerNegraImporter](#ddbtigernegraimporter)
-19. [FuerstinnenEXBImporter](#fuerstinnenexbimporter)
+9. [WebAnnoTopFImporter](#webannotopfimporter)
+10. [WebAnnoTSVImporter](#webannotsvimporter)
+11. [CoraXMLReMImporter](#coraxmlremimporter)
+12. [CoraXMLAnselmImporter](#coraxmlanselmimporter)
+13. [CoraXMLReFBoImporter](#coraxmlrefboimporter)
+14. [TextImporter](#textimporter)
+15. [XMLKaJuKImporter](#xmlkajukimporter)
+16. [MercuriusTigerXMLImporter](#mercuriustigerxmlimporter)
+17. [ReFUPImporter](#refupimporter)
+18. [XMLFnhdCImporter](#xmlfnhdcimporter)
+19. [GerManCCoNLLImporter](#germancconllimporter)
+20. [DDBTigerNegraImporter](#ddbtigernegraimporter)
+21. [FuerstinnenEXBImporter](#fuerstinnenexbimporter)
+22. [SDeWaCIteratorImporter](#sdewaciteratorimporter)
 
 ### CoNLLUPlusImporter
 
@@ -353,6 +356,95 @@ WIEDERAUFNAHME | coreference
 #### Additional Info
 
 - The Processors `HIPKONtoSTTSMapper` and `addmissingSTTStoHIPKON` can be used to match the POS-tags of HIPKON to the corresponding STTS-tags.
+
+### WebAnnoTopFImporter
+
+- Name for usage in command line: `webannotopf`
+
+#### Input Format
+
+- [WebAnno TSV 3.2](https://webanno.github.io/webanno/releases/3.4.5/docs/user-guide.html#sect_webannotsv)
+- Lines containing the annotations of a word (seperated by tabs), blank lines marking sentence boundaries.
+- Comment lines starting with hash (#).
+- Field contains an underscore if info is not available for the current word.
+
+#### Input Data
+
+
+
+#### Meta-Info
+
+- Following meta-info is extracted into the output file:
+	sent_id(TSV)
+  
+#### Annotations
+
+- Can contain a subset of the following annotations:
+
+column name | annotation
+------ | ------
+TSVID | sentence and word index
+CharOffset | character offset
+FORM | word form
+LEMMA | Lemma
+POS | POS-tag
+XPOS | STTS-Tag
+CHUNK | syntactically correlated parts of words
+TopF | Topological Field
+HEAD | head
+DEPREL | dependency relation to the head
+DepFlavor | dependency annotation
+animacy | morphological feature
+aspect | morphological feature
+case | morphological feature
+definiteness | morphological feature
+degree | morphological feature
+gender | morphological feature
+mood | morphological feature
+negative | morphological feature
+numType | morphological feature
+number | morphological feature
+person | morphological feature
+possessive | morphological feature
+pronType | morphological feature
+reflex | morphological feature
+tense | morphological feature
+transitivity | morphological feature
+FEATS | morphological features
+verbForm | morphological feature
+voice | morphological feature  
+
+### WebAnnoTSVImporter
+
+- Name for usage in command line: `webannotsv`
+
+#### Input Format
+
+- [WebAnno TSV 3.2](https://webanno.github.io/webanno/releases/3.4.5/docs/user-guide.html#sect_webannotsv)
+- Lines containing the annotations of a word (seperated by tabs), blank lines marking sentence boundaries.
+- Comment lines starting with hash (#).
+- Field contains an underscore if info is not available for the current word.
+
+#### Input Data
+
+
+
+#### Meta-Info
+
+- Following meta-info is extracted into the output file:
+	sent_id(TSV)
+  
+#### Annotations
+
+- Can contain the following annotations plus additional ones.
+
+column name | annotation
+------ | ------
+TSVID | sentence and word index
+CharOffset | character offset
+FORM | word form
+LEMMA | Lemma
+XPOS | STTS-Tag  
 
 ### CoraXMLReMImporter
 
@@ -958,6 +1050,44 @@ TimelineID | corresponding index in the timeline
 #### Additional Info
 
 - The Processor `FuerstinnentoSTTSMapper` can be used to match the POS-tags of the 'Fuerstinnenkorrespondez' to the corresponding STTS-tags.
+
+### SDeWaCIteratorImporter
+
+- Name for usage in command line: `sdewac`
+
+#### Input Format
+
+- Lines containing the annotations of a word (seperated by tabs), blank lines marking sentence boundaries
+- Field contains an underscore if info is not available for the current word
+
+#### Input Data
+
+- [SdeWaC](ims.uni-stuttgart.de/forschung/ressourcen/korpora/sdewac/)
+
+#### Meta-Info
+
+- Following meta-info is extracted into the output file:  
+  sentence ID in SDeWaC
+
+#### Annotations
+
+column name | annotation
+------ | ------
+ID | word index
+Joined_ID | sentence and word index
+FORM | word form
+LEMMA | Lemma
+UPOS | Universal POS-Tag
+XPOS | STTS-Tag
+FEATS | morphological features
+HEAD | head
+DEPREL | dependency relation to the head
+UNK1 | unknown
+UNK2 | unknown
+UNK3 | unknown
+UNK4 | unknown
+UNK5 | unknown
+UNK6 | unknown  
 
 ## Processors
 
