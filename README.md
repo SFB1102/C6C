@@ -12,7 +12,7 @@ The pipeline takes one or more files in a given input format and imports them in
 ### Requirements
 
 - Python 3
-- [click package](https://pypi.org/project/click/) ([Documentation](https://click.palletsprojects.com/))
+- [click package](https://pypi.org/project/click/)([Documentation](https://click.palletsprojects.com/))
 
 ### Command line usage
 
@@ -34,22 +34,23 @@ The pipeline is called via the command line:
 4. [TigerImporter](#tigerimporter)
 5. [TigerXMLImporter](#tigerxmlimporter)
 6. [TuebaDzImporter](#tuebadzimporter)
-7. [TuebaDZPTBImporter](#tuebadzptbimporter)
-8. [ANNISGridSentenceImporter](#annisgridsentenceimporter)
-9. [WebAnnoTopFImporter](#webannotopfimporter)
-10. [WebAnnoTSVImporter](#webannotsvimporter)
-11. [CoraXMLReMImporter](#coraxmlremimporter)
-12. [CoraXMLAnselmImporter](#coraxmlanselmimporter)
-13. [CoraXMLReFBoImporter](#coraxmlrefboimporter)
-14. [TextImporter](#textimporter)
-15. [XMLKaJuKImporter](#xmlkajukimporter)
-16. [MercuriusTigerXMLImporter](#mercuriustigerxmlimporter)
-17. [ReFUPImporter](#refupimporter)
-18. [XMLFnhdCImporter](#xmlfnhdcimporter)
-19. [GerManCCoNLLImporter](#germancconllimporter)
-20. [DDBTigerNegraImporter](#ddbtigernegraimporter)
-21. [FuerstinnenEXBImporter](#fuerstinnenexbimporter)
-22. [SDeWaCIteratorImporter](#sdewaciteratorimporter)
+7. [TUEBADSConllImporter](#tuebadsconllimporter)
+8. [TuebaDZPTBImporter](#tuebadzptbimporter)
+9. [ANNISGridSentenceImporter](#annisgridsentenceimporter)
+10. [WebAnnoTopFImporter](#webannotopfimporter)
+11. [WebAnnoTSVImporter](#webannotsvimporter)
+12. [CoraXMLReMImporter](#coraxmlremimporter)
+13. [CoraXMLAnselmImporter](#coraxmlanselmimporter)
+14. [CoraXMLReFBoImporter](#coraxmlrefboimporter)
+15. [TextImporter](#textimporter)
+16. [XMLKaJuKImporter](#xmlkajukimporter)
+17. [MercuriusTigerXMLImporter](#mercuriustigerxmlimporter)
+18. [ReFUPImporter](#refupimporter)
+19. [XMLFnhdCImporter](#xmlfnhdcimporter)
+20. [GerManCCoNLLImporter](#germancconllimporter)
+21. [DDBTigerNegraImporter](#ddbtigernegraimporter)
+22. [FuerstinnenEXBImporter](#fuerstinnenexbimporter)
+23. [SDeWaCIteratorImporter](#sdewaciteratorimporter)
 
 ### CoNLLUPlusImporter
 
@@ -273,6 +274,40 @@ WSD | GermaNet ID of the word sense
 #### Additional Info
 
 - We divided the documents up into a training, development and test set (80-10-10) via random choice.
+
+### TUEBADSConllImporter
+
+- Name for usage in command line: `tuebadsconll`
+
+#### Input Format
+
+- CoNLL Format
+- Lines containing the annotations of a word (seperated by tabs), blank lines marking sentence boundaries
+- 5 columns containing the following annotations for each word:  
+	ID (word index), FORM (word form), XPOS (language specific POS-tag), POS:HD (head), SYNTAX (syntactical information)
+- Field contains an underscore if info is not available for the current word
+
+#### Input Data
+
+- Tübingen Treebank of Spoken German (TüBa-D/S)
+
+#### Meta-Info
+
+- Not available in this format.
+  
+#### Annotations
+
+column name | annotation
+------ | ------
+ID | word index
+FORM | word form
+XPOS | STTS-Tag
+POS:HD | head
+SYNTAX | syntactical information  
+
+#### Additional Info
+
+- The Processor `TUEBADSTopFExtractor` can be used to extract the topological field information out of the SYNTAX column.
 
 ### TuebaDZPTBImporter
 
