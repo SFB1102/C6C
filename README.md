@@ -221,6 +221,7 @@ MISC | other annotation
 
 column name | annotation
 ------ | ------
+ID | word index
 FORM | word form
 LEMMA | Lemma
 XPOS | STTS-Tag
@@ -331,6 +332,7 @@ SYNTAX | syntactical information
 
 column name | annotation
 ------ | ------
+ID | word index
 FORM | word form
 XPOS | STTS-Tag
 PTBLabel | Penn Treebank Label  
@@ -364,14 +366,7 @@ column name | annotation
 ------ | ------
 ID | word index
 FORM | word form
-LEMMA | Lemma
-UPOS | Universal POS-Tag
 XPOS | STTS-Tag
-FEATS | morphological features
-HEAD | head
-DEPREL | dependency relation to the head
-DEPS | dependency graph
-MISC | other annotation
 CAT | category of a phrase (nominal, verbal etc.)
 CLEAN | normalized word form
 EDITION | page and line number of the corresponding edition
@@ -514,13 +509,7 @@ column name | annotation
 ID | word index
 FORM | word form (utf-form of tok_anno)
 LEMMA | Lemma
-UPOS | Universal POS-Tag
 XPOS | STTS-Tag
-FEATS | morphological features
-HEAD | head
-DEPREL | dependency relation to the head
-DEPS | dependency graph
-MISC | other annotation
 ANNO_ASCII | ascii-form of tok_anno
 ANNO_ID | word index of tok_anno
 ANNO_TRANS | trans-form of tok_anno
@@ -577,13 +566,7 @@ column name | annotation
 ID | word index
 FORM | word form (utf-form of tok_anno)
 LEMMA | Lemma
-UPOS | Universal POS-Tag
 XPOS | STTS-Tag
-FEATS | morphological features
-HEAD | head
-DEPREL | dependency relation to the head
-DEPS | dependency graph
-MISC | other annotation
 ANNO_ASCII | ascii-form of tok_anno
 ANNO_ID | word index of tok_anno
 ANNO_TRANS | trans-form of tok_anno
@@ -635,13 +618,7 @@ column name | annotation
 ID | word index
 FORM | word form (utf-form of tok_anno)
 LEMMA | Lemma
-UPOS | Universal POS-Tag
 XPOS | STTS-Tag
-FEATS | morphological features
-HEAD | head
-DEPREL | dependency relation to the head
-DEPS | dependency graph
-MISC | other annotation
 ANNO_ASCII | ascii-form of tok_anno
 ANNO_ID | word index of tok_anno
 ANNO_TRANS | trans-form of tok_anno
@@ -765,14 +742,8 @@ column name | annotation
 ------ | ------
 ID | word index
 FORM | word form
-LEMMA | Lemma
-UPOS | Universal POS-Tag
 XPOS | STTS-Tag
 FEATS | morphological features
-HEAD | head
-DEPREL | dependency relation to the head
-DEPS | dependency graph
-MISC | other annotation
 POS | POS-Tag from Mercurius
 TigerID | word index in the Tiger/Negra-files  
 
@@ -806,14 +777,8 @@ column name | annotation
 ------ | ------
 ID | word index
 FORM | word form
-LEMMA | Lemma
-UPOS | Universal POS-Tag
 XPOS | STTS-Tag
 FEATS | morphological features
-HEAD | head
-DEPREL | dependency relation to the head
-DEPS | dependency graph
-MISC | other annotation
 POS | POS-Tag from ReFUP
 TigerID | word index in the Tiger/Negra-files  
 
@@ -849,14 +814,7 @@ column name | annotation
 ------ | ------
 ID | word index
 FORM | word form given under the annotation `gelesen` (if not available, word form under the annotation `gefunden` is taken)
-LEMMA | Lemma
-UPOS | Universal POS-Tag
-XPOS | STTS-Tag
-FEATS | morphological features
-HEAD | head
-DEPREL | dependency relation to the head
-DEPS | dependency graph
-MISC | other annotation
+lemma | Lemma
 Anmerkungen | annotation is `Name` if the word belongs to a name
 Layout | layout information (title, quotation etc.)
 Seite_col | page column
@@ -986,14 +944,8 @@ column name | annotation
 ------ | ------
 ID | word index
 FORM | word form
-LEMMA | Lemma
-UPOS | Universal POS-Tag
 XPOS | STTS-Tag
 FEATS | morphological features
-HEAD | head
-DEPREL | dependency relation to the head
-DEPS | dependency graph
-MISC | other annotation
 POS | POS-Tag from DDB
 TigerID | word index in the Tiger/Negra-files  
 
@@ -1003,14 +955,8 @@ column name | annotation
 ------ | ------
 ID | word index
 FORM | word form
-LEMMA | Lemma
-UPOS | Universal POS-Tag
 XPOS | STTS-Tag
 FEATS | morphological features
-HEAD | head
-DEPREL | dependency relation to the head
-DEPS | dependency graph
-MISC | other annotation
 ASPECT | aspect
 CAT | corresponding syntactical sentence part
 CONTEXT | context
@@ -1056,13 +1002,8 @@ column name | annotation
 ID | word index
 FORM | word form
 LEMMA | Lemma
-UPOS | Universal POS-Tag
 XPOS | STTS-Tag
 FEATS | morphological features
-HEAD | head
-DEPREL | dependency relation to the head
-DEPS | dependency graph
-MISC | other annotation
 CLAUSE-ST | clause-status
 COMMENT | explanation of the features that are tagged under LEX_GR
 COMPLEX | sentence complexity
