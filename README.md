@@ -31,26 +31,28 @@ The pipeline is called via the command line:
 1. [CoNLLUPlusImporter](#conlluplusimporter)
 2. [CoNLLUImporter](#conlluimporter)
 3. [CoNLL2000Importer](#conll2000importer)
-4. [TigerImporter](#tigerimporter)
-5. [TigerXMLImporter](#tigerxmlimporter)
-6. [TuebaDzImporter](#tuebadzimporter)
-7. [TUEBADSConllImporter](#tuebadsconllimporter)
-8. [TuebaDZPTBImporter](#tuebadzptbimporter)
-9. [ANNISGridSentenceImporter](#annisgridsentenceimporter)
-10. [WebAnnoTopFImporter](#webannotopfimporter)
-11. [WebAnnoTSVImporter](#webannotsvimporter)
-12. [CoraXMLReMImporter](#coraxmlremimporter)
-13. [CoraXMLAnselmImporter](#coraxmlanselmimporter)
-14. [CoraXMLReFBoImporter](#coraxmlrefboimporter)
-15. [TextImporter](#textimporter)
-16. [XMLKaJuKImporter](#xmlkajukimporter)
-17. [MercuriusTigerXMLImporter](#mercuriustigerxmlimporter)
-18. [ReFUPImporter](#refupimporter)
-19. [XMLFnhdCImporter](#xmlfnhdcimporter)
-20. [GerManCCoNLLImporter](#germancconllimporter)
-21. [DDBTigerNegraImporter](#ddbtigernegraimporter)
-22. [FuerstinnenEXBImporter](#fuerstinnenexbimporter)
-23. [SDeWaCIteratorImporter](#sdewaciteratorimporter)
+4. [TCFDTAImporter](#tcfdtaimporter)
+5. [XMLDTAImporter](#xmldtaimporter)
+6. [TigerImporter](#tigerimporter)
+7. [TigerXMLImporter](#tigerxmlimporter)
+8. [TuebaDzImporter](#tuebadzimporter)
+9. [TUEBADSConllImporter](#tuebadsconllimporter)
+10. [TuebaDZPTBImporter](#tuebadzptbimporter)
+11. [ANNISGridSentenceImporter](#annisgridsentenceimporter)
+12. [WebAnnoTopFImporter](#webannotopfimporter)
+13. [WebAnnoTSVImporter](#webannotsvimporter)
+14. [CoraXMLReMImporter](#coraxmlremimporter)
+15. [CoraXMLAnselmImporter](#coraxmlanselmimporter)
+16. [CoraXMLReFBoImporter](#coraxmlrefboimporter)
+17. [TextImporter](#textimporter)
+18. [XMLKaJuKImporter](#xmlkajukimporter)
+19. [MercuriusTigerXMLImporter](#mercuriustigerxmlimporter)
+20. [ReFUPImporter](#refupimporter)
+21. [XMLFnhdCImporter](#xmlfnhdcimporter)
+22. [GerManCCoNLLImporter](#germancconllimporter)
+23. [DDBTigerNegraImporter](#ddbtigernegraimporter)
+24. [FuerstinnenEXBImporter](#fuerstinnenexbimporter)
+25. [SDeWaCIteratorImporter](#sdewaciteratorimporter)
 
 ### CoNLLUPlusImporter
 
@@ -153,6 +155,69 @@ column name | annotation
 FORM | word form
 XPOS | language specific POS-tag
 CHUNK | syntactically correlated parts of words  
+
+### TCFDTAImporter
+
+- Name for usage in command line: `tcfdta`
+
+#### Input Format
+
+- [Text Corpus Format](https://weblicht.sfs.uni-tuebingen.de/weblichtwiki/index.php/The_TCF_Format)
+- XML-File consisting of a `<MetaData>` and a `<TextCorpus>` node.
+- The `<TextCorpus>` node contains the tokens and further annotation layers.
+
+#### Input Data
+
+- [Deutsches Textarchiv](https://www.deutschestextarchiv.de/download#tcf)
+
+#### Meta-Info
+
+- Not available.
+
+#### Annotations
+
+column name | annotation
+------ | ------
+ID | word index
+FORM | word form
+LEMMA | Lemma
+XPOS | STTS-Tag
+NORM | normalised word form
+NORM_OP | operation for normalising the word form
+NORM_REASON | reason for normalising the word form  
+
+### XMLDTAImporter
+
+- Name for usage in command line: `xmldta`
+
+#### Input Format
+
+- XML-Format
+- File consisting of a `<teiHeader>` node which contains meta-information and a `<text>` node which contains further annotation layers.
+
+#### Input Data
+
+- [Deutsches Textarchiv](https://www.deutschestextarchiv.de)
+
+#### Meta-Info
+
+- Following meta-infos are extracted into a seperate file:
+	filename, DTA filename, author, title, subtitle, year, place, number of tokens, number of types, number of characters,
+	URL, text class (DTA main), text class (DTA sub), language code, language
+- Following meta-infos are extracted into the output file:
+	sent_ID (DTA), paragraph_id, text_section, div_type
+
+#### Annotations
+
+column name | annotation
+------ | ------
+ID | word index
+FORM | word form
+LEMMA | Lemma
+XPOS | STTS-Tag
+DTA:NORM | normalised word form
+DTA:ORIG | original word form
+DTA:REG | regularised word form  
 
 ### TigerImporter
 
@@ -723,9 +788,9 @@ type | type of a word/phrase
 #### Input Format
 
 - XML-Tiger/Negra-Format
-	  - The `<head>` node contains meta-information and information about the annotations.
-	  - The `<body>` node contains the individual sentences with their syntax-graphs.
-	  - Each graph consists of `<terminals>`, which contain the words and the corresponding annotations, and `<nonterminals>`,
+- The `<head>` node contains meta-information and information about the annotations.
+- The `<body>` node contains the individual sentences with their syntax-graphs.
+- Each graph consists of `<terminals>`, which contain the words and the corresponding annotations, and `<nonterminals>`,
 		which contain the structure of the syntax-tree including the corresponding edge and node labels.
 
 #### Input Data
