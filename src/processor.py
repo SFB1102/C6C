@@ -1083,3 +1083,205 @@ class BracketRemover(Processor):
                         if b in tok.FORM: tok.FORM = tok.FORM.replace(b, "")
 
         return doc
+
+#########################
+
+class DependencyProcessor(Processor):
+
+    def __init__(self):
+        pass
+
+    #####################
+
+    def process_sentence(self, sent):
+
+        #Add root(s) to sentence
+        #And inform every tok about its head-token
+        sent.roots = []
+        for tok in sent.tokens:
+            if tok.HEAD == "0":
+                sent.roots.append(tok)
+                tok.head_tok = "ROOT"
+            elif tok.HEAD != "_":
+                try:
+                    tok.head_tok = [t for t in sent.tokens if t.ID == tok.HEAD][0]
+                except:
+                    tok.head_tok = None
+            else:
+                tok.head_tok = None
+
+        #Then inform every tok about its children
+        for tok in sent.tokens:
+            tok.dep_toks = [t for t in sent.tokens if t.head_tok == tok]          
+
+        return sent
+
+    #####################
+
+    def process(self, doc):
+
+        for sent in doc.sentences:
+            sent = self.process_sentence(sent)
+        
+        return doc
+
+############################
+
+class DependencyManipulator(Processor):
+
+    def __init__(self):
+        pass
+
+    #####################
+
+    def process_sentence(self, sent):
+
+        if not "roots" in sent.__dict__:
+            sent = DependencyProcessor().process_sentence(sent)
+
+        #for tok in sent.tokens:
+        #    print(tok.ID, tok.FORM, tok.DEPREL, tok.HEAD)
+
+        #Switch copula relation
+        copulas = [tok for tok in sent.tokens if tok.DEPREL == "cop"]
+        for copula in copulas:
+            new_pred = copula.head_tok
+            if new_pred == "ROOT" or new_pred == None:
+                continue
+            #Dependents of former head become dependents of former copula
+            deps = [tok for tok in sent.tokens 
+                    if tok.head_tok == new_pred and tok != copula
+                    and not tok.DEPREL in ["amod", "case", 'det', 'det:neg', "nmod:poss", "nmod", "fixed", 
+                                           "appos", 'flat', 'flat:foreign', "nummod"]]
+            for dep in deps:
+                dep.head_tok = copula
+                dep.HEAD = copula.ID
+            #Former copula becomes head
+            copula.head_tok = new_pred.head_tok
+            copula.HEAD = new_pred.HEAD
+            copula.DEPREL = new_pred.DEPREL
+            #Former head becomes pred dependent
+            new_pred.head_tok = copula
+            new_pred.HEAD = copula.ID
+            new_pred.DEPREL = "pred"
+
+        #Switch aux relation
+        #auxiliaries = [tok for tok in sent.tokens if tok.DEPREL.startswith("aux")]
+        verbs = [tok for tok in sent.tokens 
+                 if any(t.DEPREL.startswith("aux") and t.head_tok == tok for t in sent.tokens)]
+        for verb in verbs:
+            auxiliaries = [tok for tok in sent.tokens 
+                           if tok.DEPREL.startswith("aux") and tok.head_tok == verb]
+            finite_aux = [tok for tok in auxiliaries if tok.XPOS.endswith("FIN")]
+            if finite_aux:
+                head_aux = finite_aux[0]
+                auxiliaries.remove(head_aux)
+            else:
+                head_aux = auxiliaries.pop(0)
+            #nsubj/nsubj:pass, advmod:neg -> dep of aux
+            deps = [tok for tok in sent.tokens 
+                    if tok.head_tok == verb 
+                       and tok.DEPREL in ["nsubj", "nsubj:pass", "advmod:neg", "conj", "cc", "mark", "case"]]
+            for dep in deps:
+                dep.head_tok = head_aux
+                dep.HEAD = head_aux.ID
+            #aux head is head of verb
+            head_aux.head_tok = verb.head_tok
+            head_aux.HEAD = verb.HEAD
+            head_aux.DEPREL = verb.DEPREL
+            #Other auxiliaries deps of one another
+            for aux in reversed(auxiliaries):
+                aux.head_tok = head_aux
+                aux.HEAD = head_aux.ID
+                aux.DEPREL = "oc"
+                head_aux = aux
+            #verb dep of aux
+            verb.head_tok = head_aux
+            verb.HEAD = head_aux.ID
+            verb.DEPREL = "oc"
+            
+        #Switch case relation for preposition  
+        prep_heads = [tok for tok in sent.tokens 
+                      if any(t.head_tok == tok and t.DEPREL == "case" 
+                             and t.XPOS.startswith("AP") for t in sent.tokens)]
+        for prep_head in prep_heads:
+            preps = [tok for tok in sent.tokens 
+                     if tok.head_tok == prep_head and tok.DEPREL == "case" 
+                     and tok.XPOS.startswith("AP")]
+            circumpreps = [tok for tok in sent.tokens
+                           if tok.head_tok == prep_head and tok.DEPREL == "fixed"
+                           and tok.XPOS == "APZR"]
+            #Define prep_head
+            new_head = preps[-1]
+
+            #Make prep head of zircumpreps
+            for cp in circumpreps:
+                cp.head_tok = new_head
+                cp.HEAD = new_head.ID
+                cp.DEPREL = "ac"
+            #Make prep head of other preps
+            for p in preps[:-1]:
+                p.head_tok = new_head
+                p.HEAD = new_head.ID
+                p.DEPREL = "ac"
+            #Make prep head of its prior head
+            new_head.head_tok = prep_head.head_tok
+            new_head.HEAD = prep_head.HEAD
+            new_head.DEPREL = prep_head.DEPREL
+            prep_head.head_tok = new_head
+            prep_head.HEAD = new_head.ID
+            prep_head.DEPREL = "nk" 
+
+        #Switch coordination
+        conjuncts = [tok for tok in sent.tokens if tok.DEPREL == "conj"]
+        for conj in conjuncts:
+            conjunctions = [tok for tok in sent.tokens if tok.head_tok == conj and tok.DEPREL == "cc"]
+            if not conjunctions:
+                continue
+            new_head = conjunctions.pop(0)
+            for cc in conjunctions:
+                cc.head_tok = new_head
+                cc.HEAD = new_head.ID
+            new_head.head_tok = conj.head_tok
+            new_head.HEAD = conj.HEAD
+            conj.head_tok = new_head
+            conj.HEAD = new_head.ID
+
+        #Switch flat relation
+        flat_heads = [tok for tok in sent.tokens 
+                      if any(t.head_tok == tok and t.DEPREL == "flat" for t in sent.tokens)]
+        for flat_head in flat_heads:
+            #Identify new head
+            flat_deps = [tok for tok in sent.tokens 
+                         if tok.head_tok == flat_head and tok.DEPREL == "flat"]
+            new_head = flat_deps[-1]
+            #Change head of all deps of previous head
+            all_deps = [tok for tok in sent.tokens if tok.head_tok == flat_head and not tok == new_head]
+            for dep in all_deps:
+                dep.head_tok = new_head
+                dep.HEAD = new_head.ID
+            #Make last flat dep the new head
+            new_head.head_tok = flat_head.head_tok
+            new_head.HEAD = flat_head.HEAD
+            new_head.DEPREL  = flat_head.DEPREL
+            #Make previous head a dep of new head
+            flat_head.head_tok = new_head
+            flat_head.HEAD = new_head.ID
+            flat_head.DEPREL = "flat"
+
+        #for tok in sent.tokens:
+        #    print(tok.ID, tok.FORM, tok.DEPREL, tok.HEAD)
+        #input()
+
+        return sent
+
+    #####################
+
+    def process(self, doc):
+
+        for sent in doc.sentences:
+            sent = self.process_sentence(sent)
+        
+        return doc
+
+############################
