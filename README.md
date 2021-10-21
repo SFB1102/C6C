@@ -33,26 +33,27 @@ The pipeline is called via the command line:
 3. [CoNLL2000Importer](#conll2000importer)
 4. [TCFDTAImporter](#tcfdtaimporter)
 5. [XMLDTAImporter](#xmldtaimporter)
-6. [TigerImporter](#tigerimporter)
-7. [TigerXMLImporter](#tigerxmlimporter)
-8. [TuebaDzImporter](#tuebadzimporter)
-9. [TUEBADSConllImporter](#tuebadsconllimporter)
-10. [TuebaDZPTBImporter](#tuebadzptbimporter)
-11. [ANNISGridSentenceImporter](#annisgridsentenceimporter)
-12. [WebAnnoTopFImporter](#webannotopfimporter)
-13. [WebAnnoTSVImporter](#webannotsvimporter)
-14. [CoraXMLReMImporter](#coraxmlremimporter)
-15. [CoraXMLAnselmImporter](#coraxmlanselmimporter)
-16. [CoraXMLReFBoImporter](#coraxmlrefboimporter)
-17. [TextImporter](#textimporter)
-18. [XMLKaJuKImporter](#xmlkajukimporter)
-19. [MercuriusTigerXMLImporter](#mercuriustigerxmlimporter)
-20. [ReFUPImporter](#refupimporter)
-21. [XMLFnhdCImporter](#xmlfnhdcimporter)
-22. [GerManCCoNLLImporter](#germancconllimporter)
-23. [DDBTigerNegraImporter](#ddbtigernegraimporter)
-24. [FuerstinnenEXBImporter](#fuerstinnenexbimporter)
-25. [SDeWaCIteratorImporter](#sdewaciteratorimporter)
+6. [DTATSVImporter](#dtatsvimporter)
+7. [TigerImporter](#tigerimporter)
+8. [TigerXMLImporter](#tigerxmlimporter)
+9. [TuebaDzImporter](#tuebadzimporter)
+10. [TUEBADSConllImporter](#tuebadsconllimporter)
+11. [TuebaDZPTBImporter](#tuebadzptbimporter)
+12. [ANNISGridSentenceImporter](#annisgridsentenceimporter)
+13. [WebAnnoTopFImporter](#webannotopfimporter)
+14. [WebAnnoTSVImporter](#webannotsvimporter)
+15. [CoraXMLReMImporter](#coraxmlremimporter)
+16. [CoraXMLAnselmImporter](#coraxmlanselmimporter)
+17. [CoraXMLReFBoImporter](#coraxmlrefboimporter)
+18. [TextImporter](#textimporter)
+19. [XMLKaJuKImporter](#xmlkajukimporter)
+20. [MercuriusTigerXMLImporter](#mercuriustigerxmlimporter)
+21. [ReFUPImporter](#refupimporter)
+22. [XMLFnhdCImporter](#xmlfnhdcimporter)
+23. [GerManCCoNLLImporter](#germancconllimporter)
+24. [DDBTigerNegraImporter](#ddbtigernegraimporter)
+25. [FuerstinnenEXBImporter](#fuerstinnenexbimporter)
+26. [SDeWaCIteratorImporter](#sdewaciteratorimporter)
 
 ### CoNLLUPlusImporter
 
@@ -218,6 +219,10 @@ XPOS | STTS-Tag
 DTA:NORM | normalised word form
 DTA:ORIG | original word form
 DTA:REG | regularised word form  
+
+### DTATSVImporter
+
+- Importer for WebAnno TSV export of custom annotations from [project C6](https://github.com/rubcompling/C6Samples) (SFB 1102).
 
 ### TigerImporter
 
@@ -463,10 +468,6 @@ WIEDERAUFNAHME | coreference
 - Comment lines starting with hash (#).
 - Field contains an underscore if info is not available for the current word.
 
-#### Input Data
-
-
-
 #### Meta-Info
 
 - Following meta-info is extracted into the output file:
@@ -519,10 +520,6 @@ voice | morphological feature
 - Lines containing the annotations of a word (seperated by tabs), blank lines marking sentence boundaries.
 - Comment lines starting with hash (#).
 - Field contains an underscore if info is not available for the current word.
-
-#### Input Data
-
-
 
 #### Meta-Info
 
@@ -1152,6 +1149,8 @@ UNK6 | unknown
 18. [PronominalAdverbMapper](#pronominaladverbmapper)
 19. [ReFUPCoding](#refupcoding)
 20. [BracketRemover](#bracketremover)
+21. [DependencyProcessor](#dependencyprocessor)
+22. [DependencyManipulator](#dependencymanipulator)
 
 ### DTASimplifier
 
@@ -1426,6 +1425,32 @@ UNK6 | unknown
 #### Output
 
 - Doc-Object that contains tokens without brackets in their word form.
+
+### DependencyProcessor
+
+- Extracts the dependency relations of all tokens.
+
+#### Required Input
+
+- Doc-Object that contains tokens with dependency annotations (at least ID and HEAD attributes).
+
+#### Output
+
+- Doc-Object with added head_tok attribute (for the parent) and dep_toks attribute (for the children) for each token
+and added roots attribute (list of all root tokens) for each sentence.
+
+### DependencyManipulator
+
+- Maps dependency annotations to a different dependency annotation scheme.
+
+#### Required Input
+
+- Doc-Object that contains tokens with dependency annotations (at least ID, HEAD and DEPREL attributes).
+
+#### Output
+
+- Doc-Object with changed dependency annotations of the tokens.
+
 
 ## Exporters
 
