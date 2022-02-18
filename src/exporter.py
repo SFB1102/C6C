@@ -21,15 +21,15 @@ class Exporter(object):
 
 class CoNLLUPlusExporter(Exporter):
 
-    COLUMNS = {"ID" : 0, "FORM" : 1, "LEMMA" : 2, "UPOS" : 3, "XPOS" : 4, \
+    COLUMNS = {"ID" : 0, "FORM" : 1, "LEMMA" : 2, "UPOS" : 3, "XPOS" : 4,
                "FEATS" : 5, "HEAD" : 6, "DEPREL" : 7, "DEPS" : 8, "MISC" : 9}
-    META = {"doc_id(tueba)" : 0, "sent_id" : 1, "sent_id(DTA)" : 2, "sent_id(Tiger)" : 2, "sent_id(TSV)" : 2, "sent_id(tueba)" : 2, "sent_id(grid)" : 3, \
+    META = {"doc_id(tueba)" : 0, "sent_id" : 1, "sent_id(DTA)" : 2, "sent_id(Tiger)" : 2, "sent_id(TSV)" : 2, "sent_id(tueba)" : 2, "sent_id(grid)" : 3,
             "paragraph_id" : 4, "text_section": 5, "div_type" : 6, "sent_type" : 7, "Kommentar" : 8, "PTBstring": 9, "text" : 10}
 
     ##########################
 
     def __init__(self):
-        pass
+        self.COLUMNS = CoNLLUPlusExporter.COLUMNS
 
     ##########################
 
@@ -46,9 +46,6 @@ class CoNLLUPlusExporter(Exporter):
     #########################
 
     def set_colums(self, doc):
-        #TODO
-        self.COLUMNS = {"ID" : 0, "FORM" : 1, "LEMMA" : 2, "UPOS" : 3, "XPOS" : 4, \
-                        "FEATS" : 5, "HEAD" : 6, "DEPREL" : 7, "DEPS" : 8, "MISC" : 9}
 
         additional_annos = set()
         for sent in doc.sentences:
