@@ -1127,6 +1127,90 @@ UNK4 | unknown
 UNK5 | unknown
 UNK6 | unknown  
 
+### GraphVarEXBImporter
+
+- Name for usage in command line: `graphvar`
+
+#### Input Format
+
+- EXMARaLDA-Format
+- The `<head>` node contains meta-information about the file.
+- The `<basic-body>` consists of a `<common-timeline>` and the `<tier>` layers with `<event>` nodes, where each node contains the words or one annotation category.
+- Each word and each annotation belong to one or more timeline-IDs, so one can match the words to their corresponding annotations with this IDs. 
+
+#### Input Data
+
+- [GraphVar: Das Klausurenkorpus, Version 1.4](https://graphvar.uni-bonn.de/)
+- For further information refer to the [Documentation](https://graphvar.uni-bonn.de/dokumentation.html)
+
+#### Meta-Info
+
+- Following meta-info is extracted into a separate file:  
+  	    Dokument (text ID), Jahr (year), Fach (subject), Punkte (credit points), Geschlecht (sex), Topologie (whether syntax annotation has been validated)
+
+#### Annotations
+
+column name | annotation
+------ | ------
+ID     | word index within a sentence
+FORM   | corrected word form (new orthography; called NORMAL in the original corpus)
+LEMMA  | lemma (NORMALlemma)
+XPOS   | STTS tag (NORMALpos)
+TimelineID  | start attribute of events
+IST         | original writing
+IST_ZIEL    | corrected writing (old or new orthography)
+IST_INDEX   | IST word index
+IST_NORMAL_DIFF  | difference between orig and corrected writing
+ZEILENTRENNUNG | line break in original writing
+FEHLER      | error (binary)
+FEHLERKATEGORIE | type of error (separated by comma, if more than one)
+SENT         | sentence spans (NORMALS)
+SYNTAX	     | path of syntactic nodes (topological fields and phrases), starting with top node (nodes separated by \|, e.g. I-SIMPX\|I-SIMPX\|B-VVINF\|B-VXINF\|B-VC)
+UEBERSCHRIFT | header spans
+ZITAT        | citation
+UNEINDEUTIG  | unclear
+KOMMENTAR    | comments
+WEBANNO      | annotation validated (using WebAnno)
+...          | (further annotation layers are possible)
+
+
+#### Additional Info
+
+- FORM consists of corrected forms. If the original writing contains additional words (e.g. a superfluous comma), there is no corresponding corrected form. Instead, an artificial empty token `<EMPTY>` is introduced.
+
+- Span annotations use prefixes `B-` (begin of span), `I-` (internal), and `E-` (end of span).
+
+- Such prefixes may occur even at free-text layers such as FORM, LEMMA or IST. In theses cases, the prefixes are `<B->`, `<I->`, and `<E->`, to avoid confusion with real characters. Example: If students incorrectly spelled one word as two words (e.g. "weiter vererben" instead of "weitervererben"), the corrected form FORM is represented as `<B->weitervererben` + `<E->weitervererben`.
+
+- Vice versa, if students incorrectly spelled two words as one word (e.g. "Desweiteren"), this word is split in two at the layer FORM: `Des` + `weiteren`, and the IST form becomes a span annotation: `<B->Desweiteren` + `<E->Desweiteren`.
+
+#### Examples
+
+
+>\# global.columns = ID FORM LEMMA UPOS XPOS ... FEHLER FEHLERKATEGORIE IST    ...  
+\# sent_id = 68  
+\# text = Auch der weitere Verlauf der Romans \<EMPTY\> lässt das Geschehen realistisch wirken.  
+...  
+6	Romans	Roman	_	NN	...	_	0	Romans  ...  
+7	\<EMPTY\>	_	_	_	...	1	PKT	,  	...  
+...  
+	
+>\# global.columns = ID FORM LEMMA UPOS XPOS ... FEHLER FEHLERKATEGORIE IST ...  
+\# sent_id = 143  
+\# text = Sein Stoffwechselsystem würde gefährdet werden und er kann seine Erbinformationen nicht an die Nachfolgegeneration <B->weitervererben <E->weitervererben.  
+...  
+15	<B->weitervererben	<B->weitervererben	_	B-VVINF	...	B-1	B-GZS	weiter	...  
+16	<E->weitervererben	<E->weitervererben	_	E-VVINF	...	E-1	E-GZS	vererben	...  
+...  
+
+>\# global.columns = ID FORM LEMMA UPOS XPOS ... FEHLER FEHLERKATEGORIE IST   ...  
+\# sent_id = 13  
+\# text = Des Weiteren bewahre die Poesie das, was ...  
+1	Des	die	_	ART  ...  B-1	  B-GZS	<B->Desweiteren	...  
+2	Weiteren	Weiter	_	NN ...	E-1	E-GZS	<E->Desweiteren	...  
+...  
+	
+
 ## Processors
 
 1. [DTASimplifier](#dtasimplifier)
