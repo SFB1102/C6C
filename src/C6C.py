@@ -25,7 +25,8 @@ importers = {"tcfdta" : importer.TCFDTAImporter, "xmldta" : importer.XMLDTAImpor
              "conll2000" : importer.CoNLL2000Importer, "sdewac" : importer.SDeWaCIteratorImporter,
              "germanc" : importer.GerManCCoNLLImporter, "tuebatrees" : importer.TuebaDZPTBImporter,
              "ddbtigernegra" : importer.DDBTigerNegraImporter, "fuerstinnenexb" : importer.FuerstinnenEXBImporter,
-             "refup" : importer.ReFUPImporter}
+             "refup" : importer.ReFUPImporter,
+             "graphvar": importer.GraphVarEXBImporter}
 exporters = {"conlluplus" : exporter.CoNLLUPlusExporter, "conllu" : exporter.CoNLLUExporter, \
              "dtatsv" : exporter.DTATSVExporter, "hipkontsv" : exporter.HIPKONTSVExporter,
              "text" : exporter.TextExporter, "pos" : exporter.POSExporter,
@@ -65,6 +66,9 @@ class Pipeline(object):
         for p in self.processors:
             doc = p.process(doc)
 
+        #Specify column order for export
+        self.exporter.column_order = self.column_order
+            
         #Export file
         self.exporter.export(doc, self.out)
 
@@ -181,6 +185,26 @@ def file_exists(file):
 
 #########################################
 
+def set_column_order(ctx, parameter, value):
+        if value == "alpha":
+            return value
+        elif value:
+            try:
+                if not os.path.isfile(value):
+                    raise FileNotFoundError
+            except FileNotFoundError:
+                print("WARNING: File %s not found, using default order instead.\n" % (value))
+                return "alpha"
+            else:
+                colfile = open(value, mode="r", encoding="utf-8")
+                cols = [c.strip() for c in colfile if c.strip()]
+                return cols
+        else:
+                return "alpha"
+
+
+#########################################
+
 @click.group()
 def cli():
     print("### C6C ###", end="\n\n")
@@ -195,11 +219,14 @@ def cli():
                                                                     "tuebadz", "annisgrid", "webannotopf", "webannotsv", "coraxmlrem",
                                                                     "tuebadsconll", "coraxmlanselm", "coraxmlrefbo", "text", "tigerxml",
                                                                     "xmlkajuk", "xmlfnhdc", "conll2000", "sdewac", "germanc", "tuebatrees",
-                                                                    "ddbtigernegra", "fuerstinnenexb", "refup", "mercuriustigerxml"], \
+                                                                    "ddbtigernegra", "fuerstinnenexb", "graphvar", "refup", "mercuriustigerxml"], \
               case_sensitive=False), help="Importer for input file format.", callback=add_component)
 @click.option("-e", "--exporter", required=True, type=click.Choice(["conlluplus", "conllu", "DTAtsv", "HIPKONtsv", "text", "pos", "conll2000", "ptb"], case_sensitive=False), \
               help="Exporter for desired output format.", callback=add_component)
 @click.option("-p", "--processors", help="Specify list of processors in order of application.", callback=add_component)
+@click.option("-cols", "--column-order", default="alpha", callback=set_column_order)
+
+
 def convert(f, out, **kwargs):
     """
     Convert input file(s) to a specified output format.

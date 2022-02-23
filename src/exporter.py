@@ -46,16 +46,26 @@ class CoNLLUPlusExporter(Exporter):
     #########################
 
     def set_colums(self, doc):
+        # xxxxxxxxxx
+        if self.__dict__.get("column_order", "alpha") != "alpha":
+            #Reset columns
+            self.COLUMNS = dict()
+            #Set columns in desired order
+            #for i, col in self.__dict__.get("column_order"):
+            #for i, col in self.__dict__.get("column_order"):
+            for i, col in enumerate(self.column_order):
+                self.COLUMNS[col] = i+len(self.COLUMNS)+1
 
-        additional_annos = set()
-        for sent in doc.sentences:
-            for tok in sent.tokens:
-                for anno,val in tok.__dict__.items():
-                    if not anno in self.COLUMNS and not val in (None, "_"):
-                        additional_annos.add(anno)
-        if additional_annos:
-            for i, anno in enumerate(sorted(additional_annos)):
-                self.COLUMNS[anno] = i+len(self.COLUMNS)+1
+        else:
+            additional_annos = set()
+            for sent in doc.sentences:
+                for tok in sent.tokens:
+                    for anno, val in tok.__dict__.items():
+                        if not anno in self.COLUMNS and not val in (None, "_"):
+                            additional_annos.add(anno)
+            if additional_annos:
+                for i, anno in enumerate(sorted(additional_annos)):
+                    self.COLUMNS[anno] = i+len(self.COLUMNS)+1
 
     #########################
 
