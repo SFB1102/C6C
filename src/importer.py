@@ -5908,7 +5908,6 @@ class GraphVarEXBImporter(Importer):
                         if tokens[timeline][col91] == tokens[timeline][col96]:
                             kwargs["FEHLER"] = tokens[timeline].get(col91, "_")
                         else:
-                            print("DIFF")
                             kwargs["FEHLER"] = tokens[timeline].get(col91, "_") + "," + \
                                                tokens[timeline].get(col96, "_")
                 else:
