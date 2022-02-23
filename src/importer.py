@@ -5708,3 +5708,256 @@ class FuerstinnenEXBImporter(Importer):
             doc.add_sent(sent)
 
         return doc
+
+
+
+
+###########################
+
+class GraphVarEXBImporter(Importer):
+
+    ################################
+
+    def __init__(self, **kwargs):
+        for key,val in kwargs.items():
+            self.__dict__[key] = val
+
+    ################################
+
+    def output_metainfo(self, metainfo, metadir):
+
+        """
+        Append metainfo for a given file to a csv-file in metadir.
+        Input: Dictionary with meta information, target directory
+        """
+        metacats = ["Dokument", "Jahr", "Fach", "Punkte", "Geschlecht", "Topologie"]
+
+        metafile = open(os.path.join(metadir, "graphvar_meta_information.csv"), mode="a", encoding="utf-8")
+
+        #Write header if
+        if metafile.tell() == 0:
+            print("\t".join(metacats), file=metafile)
+
+        print("\t".join([metainfo[metacat] for metacat in metacats]), file=metafile)
+
+        metafile.close()
+        
+
+    ################################
+
+    def import_file(self, file, metadir):
+
+        path, filename = os.path.split(file)
+
+        #Read xml tree
+        tree = ET.parse(file)
+        root = tree.getroot()
+
+        #metafile
+        metafile = path + "/" + filename.replace("exb", "xml")
+        metatree = ET.parse(metafile)
+        metaroot = metatree.getroot()
+
+        #read metainfo
+        #metainfo = self.read_metaheader(metaroot)
+        metainfo = dict()
+        metainfo["Dokument"] = os.path.splitext(filename)[0]
+        #author, addressee, comment
+        try:
+            udmeta = root.find("./head/meta-information")
+            metainfo["Jahr"] = udmeta.find("./ud-meta-information/ud-information[@attribute-name='Jahr']").text.strip()
+            metainfo["Fach"] = udmeta.find("./ud-meta-information/ud-information[@attribute-name='Fach']").text.strip()
+            metainfo["Punkte"] = udmeta.find("./ud-meta-information/ud-information[@attribute-name='Punkte']").text.strip()
+            metainfo["Geschlecht"] = udmeta.find("./ud-meta-information/ud-information[@attribute-name='Geschlecht']").text.strip()
+            metainfo["Topologie"] = udmeta.find("./ud-meta-information/ud-information[@attribute-name='Topologie']").text.strip()
+
+        except:
+            metainfo["Jahr"] = "NA"
+            metainfo["Fach"] = "NA"
+            metainfo["Punkte"] = "NA"
+            metainfo["Geschlecht"] = "NA"
+            metainfo["Topologie"] = "NA"
+        self.output_metainfo(metainfo, metadir)
+
+        doc = Doc(filename)
+
+        columns = []
+
+        #dictionary with timeline-IDs as keys and corresponding annotation-dictionaries as values
+        tokens = dict()
+        body = root.find("basic-body")
+
+        #timeline-IDs
+        timelines = body.find("common-timeline")
+        for timeline in timelines:
+            tokens[timeline.attrib["id"]] = dict()
+
+        #text+annotations
+        for tier in timelines.findall("tier"):
+            cat = tier.attrib["category"]
+            if cat not in columns: columns.append(cat)
+
+            # determine form of BIE tags
+            # free-text entries:
+            if cat in ["IST", "NORMAL", "NORMALlemma", "IST_Ziel"]:
+                mark_begin="<B->"
+                mark_within="<I->"
+                mark_end="<E->"
+            else:
+                mark_begin="B-"
+                mark_within="I-"
+                mark_end="E-"
+            
+            for event in tier.findall("event"):
+                start = event.attrib["start"]
+                end = event.attrib["end"]
+                anno = event.text
+                #save annotations in dictionary
+                started = 0
+                # for span annotations: collect annos
+                collect = list()
+                for timeline in tokens:
+                    if timeline == end:
+                        break
+                    elif started == 1:
+                        collect.append((timeline,anno))
+                    elif timeline == start:
+                        collect.append((timeline,anno))
+                        started = 1
+                # span annotations: add B- / I- / E-
+                if len(collect) > 1:
+                    for (i, (timeline,anno)) in enumerate(collect):
+                        if i == 0:
+                            anno = mark_begin + anno
+                        elif i == len(collect)-1:
+                            anno = mark_end + anno
+                        else:
+                            anno = mark_within + anno
+                        tokens[timeline][cat] = anno
+                # word annotations
+                else:
+                    (timeline,anno) = collect[0]
+                    tokens[timeline][cat] = anno
+                
+                        
+        sent = Sentence(**{"text": ""})
+        id = 1
+
+        #create tokens
+        kwargs = dict()
+        id = 1
+        for timeline in tokens:
+
+            # "NORMAL": corrected + annotated word forms
+            # -> use these as primary data
+            # first fill empty tokens on primary level that have some annotation
+            # at some of the IST/ORIG layers
+            if "NORMAL" not in tokens[timeline]:
+                for cat in ["IST", "IST_Ziel", "J1991::IST_Ziel", "J1996::IST_Ziel"]:
+                    if cat in tokens[timeline]:
+                        tokens[timeline]["NORMAL"] = "<EMPTY>"
+                        break
+            
+            if "NORMAL" in tokens[timeline]:
+                # standard CoNLL entries
+                kwargs["ID"] = str(id)
+                kwargs["FORM"] = tokens[timeline].get("NORMAL", "_")
+                kwargs["XPOS"] = tokens[timeline].get("NORMALpos", "_")
+                kwargs["LEMMA"] = tokens[timeline].get("NORMALlemma", "_")
+
+                # original event IDs
+                kwargs["TimelineID"] = timeline
+
+                # rename some of the features
+                kwargs["SENT"] = tokens[timeline].get("NORMALS", "_")
+              
+                # merge error layers
+                # (note: we don't know how many layers there are, hence: max=100)
+                col = "E1::Fehlerkategorie"
+                kwargs["FEHLERKATEGORIE"] = tokens[timeline].get(col, "_")
+                for i in range(2,100):
+                    col = "E" + str(i) + "::Fehlerkategorie"
+                    # break if no further layer exists
+                    if col not in tokens[timeline]: break
+                    # append second error only if it's a real error
+                    if tokens[timeline][col] != "0" and tokens[timeline][col] != "_":
+                        kwargs["FEHLERKATEGORIE"] += "," + tokens[timeline][col]
+
+                # merge IST_ZIEL layers
+                col = "IST_Ziel"
+                if col not in tokens[timeline]:
+                    col91 = "J1991::IST_Ziel"
+                    col96 = "J1996::IST_Ziel"
+                    if col91 in tokens[timeline] and col96 in tokens[timeline]:
+                        # no difference between 91/96
+                        if tokens[timeline][col91] == tokens[timeline][col96]:
+                            kwargs["IST_ZIEL"] = tokens[timeline].get(col91, "_")
+                        else:
+                            kwargs["IST_ZIEL"] = tokens[timeline].get(col91, "_") + "," + \
+                                                 tokens[timeline].get(col96, "_")
+                else:
+                    kwargs["IST_ZIEL"] = tokens[timeline].get(col, "_")
+
+                # merge Fehler layers
+                col = "Fehler"
+                if col not in tokens[timeline]:
+                    col91 = "J1991::Fehler"
+                    col96 = "J1996::Fehler"
+                    if col91 in tokens[timeline] and col96 in tokens[timeline]:
+                        # no difference between 91/96
+                        if tokens[timeline][col91] == tokens[timeline][col96]:
+                            kwargs["FEHLER"] = tokens[timeline].get(col91, "_")
+                        else:
+                            print("DIFF")
+                            kwargs["FEHLER"] = tokens[timeline].get(col91, "_") + "," + \
+                                               tokens[timeline].get(col96, "_")
+                else:
+                    kwargs["FEHLER"] = tokens[timeline].get(col, "_")
+                        
+                # merge syntactic layers (E1: top node)
+                # (note: we don't know how many layers there are, hence: max=100)
+                col = "E1::TopField"
+                kwargs["SYNTAX"] = tokens[timeline].get(col, "_")
+                for i in range(2,100):
+                    col = "E" + str(i) + "::TopField"
+                    # break if no further layer exists
+                    if col not in tokens[timeline]: break
+                    if tokens[timeline][col] != "_":
+                        kwargs["SYNTAX"] += "|" + tokens[timeline][col]
+                        
+                # remaining columns: copy
+                for col in columns:
+                    if col not in ["NORMAL", "NORMALpos", "NORMALlemma", "NORMALS", "tok"] \
+                       and not "::Fehlerkategorie" in col \
+                       and not "::TopField" in col \
+                       and not "IST_Ziel" in col \
+                       and not "Fehler" in col:
+                        kwargs[col.upper()] = tokens[timeline].get(col, "_")
+
+                        
+                token = Token(**kwargs)
+                sent.add_token(token)
+                kwargs.clear()
+                id += 1
+
+                #create text
+                if token.FORM not in [".", ":", ",", ";", "!", "?"]:
+                    sent.text += " " + token.FORM
+                else: sent.text += token.FORM
+
+                #end of sentence?
+                if token.SENT.startswith("E-"):
+                    sent.text = sent.text.strip()
+                    doc.add_sent(sent)
+                    sent = Sentence(**{"text": ""})
+                    id = 1
+
+                    
+        #save remaining last sentence
+        if sent.tokens:
+            sent.text = sent.text.strip()
+            doc.add_sent(sent)
+
+        return doc
+
+
