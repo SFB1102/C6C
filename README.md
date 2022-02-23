@@ -1158,7 +1158,7 @@ LEMMA  | lemma (NORMALlemma)
 XPOS   | STTS tag (NORMALpos)
 TimelineID  | start attribute of events
 IST         | original writing
-IST_ZIEL    | corrected writing (old or new orthography)
+IST_ZIEL    | corrected writing (old or new orthography) (separated by comma, if more than one according to rules of 1991 vs. 1996)
 IST_INDEX   | IST word index
 IST_NORMAL_DIFF  | difference between orig and corrected writing
 ZEILENTRENNUNG | line break in original writing
