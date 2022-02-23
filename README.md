@@ -1162,7 +1162,7 @@ IST_ZIEL    | corrected writing (old or new orthography) (separated by comma, if
 IST_INDEX   | IST word index
 IST_NORMAL_DIFF  | difference between orig and corrected writing
 ZEILENTRENNUNG | line break in original writing
-FEHLER      | error (binary)
+FEHLER      | error (binary: "XXX" or "\_") (separated by comma, if more than one according to rules of 1991 vs. 1996)
 FEHLERKATEGORIE | type of error (separated by comma, if more than one)
 SENT         | sentence spans (NORMALS)
 SYNTAX	     | path of syntactic nodes (topological fields and phrases), starting with top node (nodes separated by \|, e.g. I-SIMPX\|I-SIMPX\|B-VVINF\|B-VXINF\|B-VC)
