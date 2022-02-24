@@ -5793,7 +5793,11 @@ class GraphVarEXBImporter(Importer):
             tokens[timeline.attrib["id"]] = dict()
 
         #text+annotations
-        for tier in timelines.findall("tier"):
+        #layers 'tier' can be embedded at different positions
+        parent = body
+        if "tier" in list(timelines): parent = timelines
+            
+        for tier in parent.findall("tier"):
             cat = tier.attrib["category"]
             if cat not in columns: columns.append(cat)
 
