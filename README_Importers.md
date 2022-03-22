@@ -1151,7 +1151,7 @@ WEBANNO      | annotation validated (using WebAnno)
 
 - FORM consists of corrected forms. If the original writing contains additional words (e.g. a superfluous comma), there is no corresponding corrected form. Instead, an artificial empty token `<EMPTY>` is introduced.
 
-- Span annotations use prefixes `B-` (begin of span), `I-` (internal), and `E-` (end of span).
+- Span annotations use prefixes `B-` (begin of span), `I-` (internal), and `E-` (end of span). Singletons are not marked as such.
 
 - Such prefixes may occur even at free-text layers such as FORM, LEMMA or IST. In theses cases, the prefixes are `<B->`, `<I->`, and `<E->`, to avoid confusion with real characters. Example: If students incorrectly spelled one word as two words (e.g. "weiter vererben" instead of "weitervererben"), the corrected form FORM is represented as `<B->weitervererben` + `<E->weitervererben` (and, similarly, the LEMMA).
 
