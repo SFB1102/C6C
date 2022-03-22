@@ -22,7 +22,7 @@ The pipeline is called via the command line:
 
 - `input_dir_or_file`: can be a single file or a folder
 - `output_dir_or_file`: can be a single file or a folder
-- `input_format`: the following input formats are currently supported ([documentation](#importers) see below): `text`, `tcfDTA`, `xmlDTA`, `tiger`, `tigerxml`, `mercuriustigerxml`, `conlluplus`, `conllu`, `conll2000`, `DTAtsv`, `tuebadz`, `annisgrid`, `webannotopf`, `webannotsv`, `coraxmlrem`, `coraxmlrefbo`, `coraxmlanselm`, `tuebadsconll`, `tuebatrees`, `ddbtigernegra`, `fuerstinnenexb`, `refup`, `germanc`, `sdewac` 
+- `input_format`: the following input formats are currently supported ([documentation](#importers) see below): `text`, `tcfDTA`, `xmlDTA`, `tiger`, `tigerxml`, `mercuriustigerxml`, `conlluplus`, `conllu`, `conll2000`, `DTAtsv`, `tuebadz`, `annisgrid`, `webannotopf`, `webannotsv`, `coraxmlrem`, `coraxmlrefbo`, `coraxmlanselm`, `tuebadsconll`, `tuebatrees`, `ddbtigernegra`, `fuerstinnenexb`, `refup`, `germanc`, `sdewac`, `graphvar` 
 - `export_format`: the following export formats are currently supported ([documentation](#exporters) see below): `conlluplus`, `conllu`, `DTAtsv`, `HIPKONtsv`, `text`, `pos`, `conll2000`, `ptb`
 - `processor_name`: processors are called in the given order; the following processors are currently implemented ([documentation](#processors) see below): `dtachopper`, `dtasimplifier`, `hipkontostts`, `addmissingstts`, `topfsimplifier`, `satzklammertotopf`, `tsvindexer`, `hitstostts`,  `tuebadstopf`, `anselmtostts`, `topfchopper`, `conllindexer`, `refhitstostts`,  `depmanipulator`, `depprocessor`, `mercuriustostts`, `refuptostts`, `fuerstinnentostts`, `virgelmapper`, `pronominaladverb`, `refupcoding`, `bracketremover`
 
