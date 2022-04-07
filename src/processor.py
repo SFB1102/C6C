@@ -1285,3 +1285,107 @@ class DependencyManipulator(Processor):
         return doc
 
 ############################
+
+class TreeToBIOProcessor(Processor):
+    
+    def __init__(self):
+        pass
+
+    #########################
+
+    def tree_to_BIO_annotation(self, sentence, treename="tree", annoname="BIO"):
+        """
+        Turn a tree object into BIO annotations.
+
+        BIO annotations are stored as attribute of the tokens.
+        Hierarchical annotations are stacked with pipes.
+
+        Example annotations:
+        I-S|I-NF|I-MF|B-LK
+
+        Tokens outside of the tree are annotated with 'O'.
+
+        Input: Sentence object, name of the tree attribute, attribute name of annotations.
+        Output: Modified sentence object.
+        """
+
+        ##########################
+
+        def get_bio_spans(node):
+            """
+            Recursively get node tuples.
+
+            Input: Tree object
+            Output: List of node tuples (cat, startIndex, endIndex)
+            """
+            if node.is_terminal():
+                return []
+
+            spans = []
+
+            #If node does not contain any token
+            #and (therefore) has no start or end, skip it
+            if node.get_start_index() == None or node.get_end_index() == None:
+                pass
+            #Add tuple of this node
+            else:
+                spans.append((node.cat(), node.get_start_index(), node.get_end_index()))
+
+            #Recursively repeat
+            for child in node:
+                if not child.is_terminal():
+                    spans.extend(get_bio_spans(child))
+
+            return spans
+
+        ##########################
+        
+        #Create list with empty annotation for all tokens
+        bio_annotations = ["" for _ in sentence.tokens]
+
+        bio_spans = []
+        
+        #Recursively get tuples of cat, start and end
+        for node in sentence.__dict__.get(treename, []):
+            bio_spans.extend(get_bio_spans(node))
+            
+        #Add spans to annotation of the respective tokens
+        for span in sorted(bio_spans, key=lambda l: (l[1], 0-l[2])):
+            
+            if bio_annotations[span[1]]:
+                bio_annotations[span[1]] += "|" + "B-"+span[0]
+            else:
+                bio_annotations[span[1]] += "B-"+span[0]
+            for i in range(span[1]+1, span[2]+1):
+                if bio_annotations[i]:
+                    bio_annotations[i] += "|" + "I-"+span[0]
+                else:
+                    bio_annotations[i] += "I-"+span[0]
+        
+        #Add O for tokens outside spans
+        for t in range(len(bio_annotations)):
+            if not bio_annotations[t]:
+                bio_annotations[t] = "O"
+        
+        #Move annotations from list to token attributes
+        for tok, bio in zip(sentence.tokens, bio_annotations):
+            tok.__dict__[annoname] = bio
+        
+        return sentence
+
+    #########################
+
+    def process_sentence(self, sent):
+
+        sent = self.tree_to_BIO_annotation(sent)
+
+        return sent
+
+    #########################
+
+    def process(self, doc):
+        
+        for sent in doc.sentences:
+            sent = self.process_sentence(sent)
+
+        return doc

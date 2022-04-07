@@ -40,7 +40,8 @@ processors = {"dtachopper" : processor.DTAChopper, "dtasimplifier" : processor.D
               "conllindexer" : processor.CoNLLUPLUSIndexer, "mercuriustostts" : processor.MercuriusToSTTSMapper,
               "refuptostts" : processor.ReFUPToSTTSMapper, "fuerstinnentostts" : processor.FuerstinnentoSTTSMapper,
               "virgelmapper" : processor.VirgelMapper, "pronominaladverb" : processor.PronominalAdverbMapper,
-              "refupcoding" : processor.ReFUPCoding, "bracketremover" : processor.BracketRemover}
+              "refupcoding" : processor.ReFUPCoding, "bracketremover" : processor.BracketRemover, 
+              "treetobio" : processor.TreeToBIOProcessor}
 
 ##############################
 
