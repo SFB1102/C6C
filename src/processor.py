@@ -1293,7 +1293,7 @@ class TreeToBIOProcessor(Processor):
 
     #########################
 
-    def tree_to_BIO_annotation(self, sentence, treename="tree", annoname="BIO"):
+    def tree_to_BIO_annotation(self, sentence, treename="tree", annoname="TREE"):
         """
         Turn a tree object into BIO annotations.
 
