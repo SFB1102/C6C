@@ -5066,11 +5066,14 @@ class TuebaDZPTBImporter(Importer):
 
             tree = Tree.from_PTB_string(line.strip())
 
-            sentence = Sentence(**{"tree_object" : tree, "PTBstring": str(tree)})
+            sentence = Sentence(**{"tree" : tree, 
+                                   "PTBstring": str(tree)})
 
             #Collect tokens from tree
             terminals = tree.terminals()
-            tokens = [t.token for t in terminals]
+            tokens = [t.__dict__.get("token", 
+                                     Token(**{"FORM" : "<EMPTY>"})) 
+                      for t in terminals]
 
             #Add toks to sentences
             for tok in tokens:
