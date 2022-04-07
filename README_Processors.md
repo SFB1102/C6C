@@ -22,6 +22,7 @@
 20. [BracketRemover](#bracketremover)
 21. [DependencyProcessor](#dependencyprocessor)
 22. [DependencyManipulator](#dependencymanipulator)
+23. [TreeToBIOProcessor(#treetobioprocessor)
 
 ### DTASimplifier
 
@@ -321,4 +322,16 @@ and added roots attribute (list of all root tokens) for each sentence.
 #### Output
 
 - Doc-Object with changed dependency annotations of the tokens.
+
+### TreeToBIOProcessor
+
+- Converts a tree object to stacked BIO annotations.
+
+#### Required Input
+
+- Doc-Object that contains sentences with a tree object as attribute `tree`.
+
+#### Output
+
+- Doc-Object with BIO annotations as `TREE` attribute of the tokens.
 
