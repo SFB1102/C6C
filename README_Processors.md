@@ -22,7 +22,7 @@
 20. [BracketRemover](#bracketremover)
 21. [DependencyProcessor](#dependencyprocessor)
 22. [DependencyManipulator](#dependencymanipulator)
-23. [TreeToBIOProcessor(#treetobioprocessor)
+23. [TreeToBIOProcessor](#treetobioprocessor)
 
 ### DTASimplifier
 
