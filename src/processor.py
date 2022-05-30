@@ -802,7 +802,7 @@ class ReFHiTStoSTTSMapper(Processor):
 
                 if "-" not in tok.ID:
 
-                    del tok.__dict__["XPOS"]
+                    if "XPOS" in tok.__dict__: del tok.__dict__["XPOS"]
 
                     #punctuation
                     if tok.POS == "$_":
