@@ -29,10 +29,10 @@ class Token:
 
 class Sentence:
 
-    def __init__(self, tokens=[], **kwargs):
+    def __init__(self, tokens=None, **kwargs):
         self.n_toks = 0
         self.tokens = list()
-        if tokens:
+        if tokens != None and isinstance(tokens, list):
             for tok in tokens:
                 self.add_token(tok)
         for key,val in kwargs.items():
@@ -68,7 +68,7 @@ class Sentence:
 
 class Doc(object):
 
-    def __init__(self, filename, sentences = [], **kwargs):
+    def __init__(self, filename, sentences = None, **kwargs):
 
         self.filename = filename
 
@@ -78,7 +78,7 @@ class Doc(object):
         self.n_sents = 0
         
         self.sentences = []
-        if sentences:
+        if sentences != None and isinstance(sentences, list):
             for sent in sentences:
                 self.add_sent(sent)
                 
@@ -113,7 +113,7 @@ class Doc(object):
 
 class Tree(object):
 
-    def __init__(self, ID, cat, label, nodes = [], parent = None, **kwargs):
+    def __init__(self, ID, cat, label, nodes = None, parent = None, **kwargs):
         """
         Initialize a tree object.
 
@@ -138,7 +138,7 @@ class Tree(object):
 
         #Add child nodes
         self.children = []
-        if nodes:
+        if nodes != None and isinstance(nodes, list):
             for node in nodes:
                 self.add_child(node)
         
